@@ -10,7 +10,6 @@
     tools:context="com.example.anzhuo.myapplication.MainActivity">
 
     <TextView
-        android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Hello World!" />

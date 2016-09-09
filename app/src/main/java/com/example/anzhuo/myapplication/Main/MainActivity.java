@@ -1,9 +1,12 @@
 package com.example.anzhuo.myapplication.Main;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -16,7 +19,7 @@ import com.example.anzhuo.myapplication.R;
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     RadioGroup rg_main;
     RadioButton rb_home;
     RadioButton rb_audit;
@@ -39,6 +42,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         rb_home.setOnClickListener(this);
         rb_audit.setOnClickListener(this);
         rb_message.setOnClickListener(this);
+        showFrame(0);
     }
 
     @Override
@@ -57,8 +61,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void showFrame(int i) {
-        manager = getFragmentManager();
-        transaction = manager.beginTransaction();
+     manager=getSupportFragmentManager();
+        transaction=manager.beginTransaction();
         hideAllFrame(transaction);
         switch (i) {
             case 0:

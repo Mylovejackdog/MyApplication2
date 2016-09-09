@@ -23,6 +23,50 @@
         android:src="@drawable/write"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+</LinearLayout>
+ <RadioGroup
+     android:id="@+id/rg_head"
+     android:layout_width="match_parent"
+     android:orientation="horizontal"
+     android:layout_height="wrap_content">
+     <RadioButton
+         android:id="@+id/rb_recommend"
+         android:text="推荐"
+         style="@style/oldcar"
+         android:checked="true"
+         android:layout_height="wrap_content" />
+     <RadioButton
+         android:id="@+id/rb_text"
+         android:text="段子"
+         style="@style/oldcar"
+         android:layout_height="wrap_content" />
+     <RadioButton
+         android:id="@+id/rb_pic"
+         android:text="图片"
+         style="@style/oldcar"
+         android:layout_height="wrap_content" />
+     <RadioButton
+         android:id="@+id/rb_gif"
+         android:text="GIF"
+         style="@style/oldcar"
+         android:layout_height="wrap_content" />
+     <RadioButton
+         android:id="@+id/rb_video"
+         android:text="视频"
+         style="@style/oldcar"
+         android:layout_height="wrap_content" />
+ </RadioGroup>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <ListView
+            android:id="@+id/lv_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
 
-</LinearLayout>
-</LinearLayout>
+
+    </android.support.v4.view.ViewPager>
+    </LinearLayout>

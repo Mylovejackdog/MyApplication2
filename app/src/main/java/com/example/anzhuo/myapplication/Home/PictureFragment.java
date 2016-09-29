@@ -38,11 +38,8 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
     HomePictureBaseadapter homePictureBaseadapter;
     HomePictureAdapterInfo homePictureAdapterInfo;
     OkHttpClient okHttpClient;
-    String str;
     final static int MSG = 11;
     final static int MSN = 12;
-    Gson gson;
-    HomePictureJsonInfo info;
     BmobQuery query;
     private int limit = 10;
     private int page = 0;

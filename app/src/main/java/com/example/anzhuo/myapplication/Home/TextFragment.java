@@ -40,7 +40,6 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
     HomeTextBaseadpter homeTextBaseadpter;
     HomeTextAdapterInfo homeTextAdapterInfo;
     OkHttpClient okHttpClient;
-    String str;
     final static int MSG = 11;
     final static int MSN = 12;
     TextBmobInfo textBmobInfo;

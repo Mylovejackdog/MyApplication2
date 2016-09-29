@@ -38,7 +38,6 @@ public class GifFragment extends Fragment implements ReflashListView.IReflashLis
     HomeGifBaseadpter homeGifBaseadpter;
     HomeGifAdapterInfo homeGifAdapterInfo;
     OkHttpClient okHttpClient;
-    String str;
     final static int MSG = 11;
     final static int MSN = 12;
     BmobQuery query;

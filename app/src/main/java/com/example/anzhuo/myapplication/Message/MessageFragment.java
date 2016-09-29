@@ -1,4 +1,4 @@
-package com.example.anzhuo.myapplication.Home;
+package com.example.anzhuo.myapplication.Message;
 
 
 import android.os.Bundle;
@@ -13,11 +13,14 @@ import com.example.anzhuo.myapplication.R;
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class GifActivity extends Fragment {
+public class MessageFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.home_gif_layout,null);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view=inflater.inflate(R.layout.oldcar_message_layout,null);
+        return view;
     }
+
 }
+

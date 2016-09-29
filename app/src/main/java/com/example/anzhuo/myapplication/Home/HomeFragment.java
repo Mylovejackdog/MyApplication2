@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
+import com.example.anzhuo.myapplication.Adapter.HomeAdapter;
 import com.example.anzhuo.myapplication.R;
 
 import java.util.ArrayList;
@@ -18,13 +19,13 @@ import java.util.List;
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class HomeActivity  extends Fragment {
+public class HomeFragment extends Fragment {
     List<Fragment> list;
-    RecommendActivity recommendActivity;
-    TextActivity textActivity;
-    PictureActivity pictureActivity;
-    GifActivity gifActivity;
-    VideoActivity videoActivity;
+    RecommendFragment recommendActivity;
+    TextFragment textActivity;
+    PictureFragment pictureActivity;
+    GifFragment gifActivity;
+    VideoFragment videoActivity;
     ViewPager vp_main;
     HomeAdapter homeAdapter;
     RadioGroup rg_head;
@@ -41,11 +42,11 @@ public class HomeActivity  extends Fragment {
        vp_main= (ViewPager) view.findViewById(R.id.vp_main);
         rg_head= (RadioGroup) view.findViewById(R.id.rg_head);
         list=new ArrayList<>();
-        recommendActivity=new RecommendActivity();
-        textActivity=new TextActivity();
-        pictureActivity=new PictureActivity();
-        gifActivity=new GifActivity();
-        videoActivity=new VideoActivity();
+        recommendActivity=new RecommendFragment();
+        textActivity=new TextFragment();
+        pictureActivity=new PictureFragment();
+        gifActivity=new GifFragment();
+        videoActivity=new VideoFragment();
         list.add(recommendActivity);
         list.add(textActivity);
         list.add(pictureActivity);

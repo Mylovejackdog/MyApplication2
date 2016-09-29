@@ -13,7 +13,7 @@ import com.example.anzhuo.myapplication.R;
 /**
  * Created by anzhuo on 2016/9/9.
  */
-public class AuditActivity  extends Fragment {
+public class AuditFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

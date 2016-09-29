@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<ListView
+<com.example.anzhuo.myapplication.ReflashListView.ReflashListView
     android:id="@+id/lv_video"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"></ListView>
+    android:layout_height="wrap_content"></com.example.anzhuo.myapplication.ReflashListView.ReflashListView>
 </LinearLayout>

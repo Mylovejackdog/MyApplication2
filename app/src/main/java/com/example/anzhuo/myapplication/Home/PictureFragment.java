@@ -1,5 +1,8 @@
 package com.example.anzhuo.myapplication.Home;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,9 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anzhuo.myapplication.Adapter.HomePictureBaseadapter;
 import com.example.anzhuo.myapplication.AdapterInfo.HomePictureAdapterInfo;
+import com.example.anzhuo.myapplication.DataInfo.Info;
+import com.example.anzhuo.myapplication.DataInfo.TextBmobInfo;
 import com.example.anzhuo.myapplication.R;
 import com.example.anzhuo.myapplication.ReflashListView.ReflashListView;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -23,9 +29,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import okhttp3.OkHttpClient;
 
@@ -40,101 +48,76 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
     OkHttpClient okHttpClient;
     final static int MSG = 11;
     final static int MSN = 12;
-    BmobQuery query;
+    BmobQuery<Info> query;
     private int limit = 10;
     private int page = 0;
-
+    boolean isCache;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-                switch (msg.what) {
-                    case MSG:
-                        query.order("-creat_time");
-                        query.setLimit(limit);
-                        query.findObjectsByTable(new QueryListener<JSONArray>() {
-                            @Override
-                            public void done(JSONArray jsonArray, BmobException e) {
-                                if (e == null) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        try {
-                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            homePictureAdapterInfo = new HomePictureAdapterInfo();
-                                            homePictureAdapterInfo.setIv_head(R.drawable.olddriver);
-                                            homePictureAdapterInfo.setTv_name("老司机");
-                                            homePictureAdapterInfo.setTv_title(jsonObject.getString("title"));
-                                            homePictureAdapterInfo.setIv_content(jsonObject.getString("img"));
-                                            list.add(homePictureAdapterInfo);
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        }
-                                    }
-
-                                    lv_pic.setAdapter(homePictureBaseadapter);
-
+            switch (msg.what) {
+                case MSG:
+                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                    query.order("-creat_time");
+                    query.setLimit(limit);
+                    isCache = query.hasCachedResult(Info.class);
+                    query.setMaxCacheAge(TimeUnit.DAYS.toMillis(30));
+                    if (isCache&&!checkNetworkInfo()) {
+                        //--此为举个例子，并不一定按这种方式来设置缓存策略
+                        Log.i("textfragment","缓存存在");
+                        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);    // 如果有缓存的话，则设置策略为CACHE_ELSE_NETWORK
+                    } else if(isCache&&checkNetworkInfo()) {
+                        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则设置策略为NETWORK_ELSE_CACHE
+                    }
+                    query.findObjects(new FindListener<Info>() {
+                        @Override
+                        public void done(List<Info> mlist, BmobException e) {
+                            if (e == null) {
+                                for (Info info : mlist) {
+                                    homePictureAdapterInfo = new HomePictureAdapterInfo();
+                                    homePictureAdapterInfo.setIv_head(R.drawable.olddriver);
+                                    homePictureAdapterInfo.setTv_name("老司机");
+                                    homePictureAdapterInfo.setTv_title(info.getTitle());
+                                    homePictureAdapterInfo.setIv_content(info.getImg());
+                                    list.add(homePictureAdapterInfo);
                                 }
+                                homePictureBaseadapter.notifyDataSetChanged();
+                            } else {
+                                return;
                             }
-                        });
-                        break;
+                        }
+                    });
+                    break;
 
-//                        gson = new Gson();
-//                        info = gson.fromJson(str, HomePictureJsonInfo.class);
-//                        for (int i = 0; i < info.getShowapi_res_body().getContentlist().toArray().length; i++) {
-//                            homePictureAdapterInfo = new HomePictureAdapterInfo();
-//                            homePictureAdapterInfo.setIv_head(R.drawable.olddriver);
-//                            homePictureAdapterInfo.setTv_name("老司机");
-//                            homePictureAdapterInfo.setIv_content(info.getShowapi_res_body().getContentlist().get(i).getImg());
-//                            homePictureAdapterInfo.setTv_title(info.getShowapi_res_body().getContentlist().get(i).getTitle());
-//                            list.add(0, homePictureAdapterInfo);
-//                        }
-
-
-                    case MSN:
-                         page++;
-                        query.order("-creat_time");
-                        query.setLimit(limit);
-                        query.setSkip(limit * page);
-                        query.findObjectsByTable(new QueryListener<JSONArray>() {
-                            @Override
-                            public void done(JSONArray jsonArray, BmobException e) {
-                                if (e == null) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        try {
-                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            homePictureAdapterInfo = new HomePictureAdapterInfo();
-                                            homePictureAdapterInfo.setIv_head(R.drawable.olddriver);
-                                            homePictureAdapterInfo.setTv_name("老司机");
-                                            homePictureAdapterInfo.setTv_title(jsonObject.getString("title"));
-                                            homePictureAdapterInfo.setIv_content(jsonObject.getString("img"));
-                                            list.add(homePictureAdapterInfo);
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        }
-
-                                    }
-                                    homePictureBaseadapter.notifyDataSetChanged();
-                                    lv_pic.onLoadComplete();
-
+                case MSN:
+                    page++;
+                    query.order("-creat_time");
+                    query.setLimit(limit);
+                    query.setSkip(limit * page);
+                    query.findObjects(new FindListener<Info>() {
+                        @Override
+                        public void done(List<Info> mlist, BmobException e) {
+                            if (e == null) {
+                                for (Info info : mlist) {
+                                    homePictureAdapterInfo = new HomePictureAdapterInfo();
+                                    homePictureAdapterInfo.setIv_head(R.drawable.olddriver);
+                                    homePictureAdapterInfo.setTv_name("老司机");
+                                    homePictureAdapterInfo.setTv_title(info.getTitle());
+                                    homePictureAdapterInfo.setIv_content(info.getImg());
+                                    list.add(homePictureAdapterInfo);
                                 }
+                            } else {
+                                Toast.makeText(getActivity(), "网络异常", Toast.LENGTH_SHORT).show();
+                                return;
                             }
-                        });
-
-
-                        break;
-//                        gson = new Gson();
-//                        info = gson.fromJson(str, HomePictureJsonInfo.class);
-//                        for (int i = 0; i < info.getShowapi_res_body().getContentlist().toArray().length; i++) {
-//                            homePictureAdapterInfo = new HomePictureAdapterInfo();
-//                            homePictureAdapterInfo.setIv_head(R.drawable.olddriver);
-//                            homePictureAdapterInfo.setTv_name("老司机");
-//                            homePictureAdapterInfo.setIv_content(info.getShowapi_res_body().getContentlist().get(i).getImg());
-//                            homePictureAdapterInfo.setTv_title(info.getShowapi_res_body().getContentlist().get(i).getTitle());
-//                            list.add(homePictureAdapterInfo);
-//                        }
-
-
-                }
+                        }
+                    });
+                    homePictureBaseadapter.notifyDataSetChanged();
+                    lv_pic.onLoadComplete();
+                    break;
             }
+        }
 
     };
 
@@ -149,11 +132,12 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Fresco.initialize(getActivity());
-        query = new BmobQuery("Info");
+        query = new BmobQuery<Info>();
         lv_pic = (ReflashListView) view.findViewById(R.id.lv_pic);
         lv_pic.setInterface(this);
         list = new ArrayList<>();
         homePictureBaseadapter = new HomePictureBaseadapter(getActivity(), list);
+        lv_pic.setAdapter(homePictureBaseadapter);
         okHttpClient = new OkHttpClient();
         startThread();
     }
@@ -182,17 +166,6 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
     }
 
 
-//    private String requestUrl(String url) {
-//        Request request = new Request.Builder().url(url).build();
-//        try {
-//            Response response = okHttpClient.newCall(request).execute();
-//            str = response.body().string();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return str;
-//    }
-
 
     public void onReflash() {
 
@@ -201,7 +174,6 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
             @Override
             public void run() {
                 lv_pic.reflashComplete();
-
             }
 
         }, 2000);
@@ -215,12 +187,19 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
             @Override
             public void run() {
                 ReflashThread();
-
-                Log.i("info", page + "****************" + "///////////////////****");
-
             }
 
         }, 2000);
 
+    }
+    public boolean checkNetworkInfo() {
+        ConnectivityManager conMan = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING)
+            return true;
+        if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING)
+            return true;
+        return false;
     }
 }

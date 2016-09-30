@@ -39,9 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Bmob.initialize(this, "a914836045e7de6a29035e84e62b59e7");
         setContentView(R.layout.oldcar_main_layout);
-        if (!checkNetworkInfo()){
-            Toast.makeText(MainActivity.this,"网络已断开",Toast.LENGTH_SHORT).show();
-        }
         rg_main = (RadioGroup) findViewById(R.id.rg_main);
         rb_home = (RadioButton) findViewById(R.id.rb_home);
         rb_audit = (RadioButton) findViewById(R.id.rb_audit);

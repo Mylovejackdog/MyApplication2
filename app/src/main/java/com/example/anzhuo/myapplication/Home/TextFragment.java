@@ -1,6 +1,10 @@
 package com.example.anzhuo.myapplication.Home;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,10 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.anzhuo.myapplication.Adapter.HomeTextBaseadpter;
 import com.example.anzhuo.myapplication.AdapterInfo.HomeTextAdapterInfo;
 import com.example.anzhuo.myapplication.DataInfo.TextBmobInfo;
+import com.example.anzhuo.myapplication.MainActivity;
 import com.example.anzhuo.myapplication.R;
 import com.example.anzhuo.myapplication.ReflashListView.ReflashListView;
 
@@ -23,9 +30,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import okhttp3.OkHttpClient;
 
@@ -43,71 +52,76 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
     final static int MSG = 11;
     final static int MSN = 12;
     TextBmobInfo textBmobInfo;
-    BmobQuery query;
+    BmobQuery<TextBmobInfo> query;
     private int limit = 10;
     private int page = 0;
+    boolean hasCache;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG:
+                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
                     query.order("-creat_time");
                     query.setLimit(limit);
-                    query.findObjectsByTable(new QueryListener<JSONArray>() {
-                        @Override
-                        public void done(JSONArray jsonArray, BmobException e) {
-                            if (e == null) {
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    try {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                        homeTextAdapterInfo = new HomeTextAdapterInfo();
-                                        homeTextAdapterInfo.setIv_head(R.drawable.olddriver);
-                                        homeTextAdapterInfo.setTv_name("老司机");
-                                        homeTextAdapterInfo.setTv_content(jsonObject.getString("content"));
-//                                        homeTextAdapterInfo.setTv_good(jsonObject.getInt("good_count")+"");
-//                                        homeTextAdapterInfo.setTv_bad(jsonObject.getInt("bad_count")+"");
-//                                        homeTextAdapterInfo.setTv_comment(jsonObject.getInt("comment_count")+"");
-                                        list.add(homeTextAdapterInfo);
-                                    } catch (JSONException e1) {
-                                        e1.printStackTrace();
-                                    }
+                    //判断是否有缓存，该方法必须放在查询条件（如果有的话）都设置完之后再来调用才有效，就像这里一样。
+                    hasCache = query.hasCachedResult(TextBmobInfo.class);
+                    query.setMaxCacheAge(TimeUnit.DAYS.toMillis(30));
+                    if (hasCache&&!checkNetworkInfo()) {
+                        //--此为举个例子，并不一定按这种方式来设置缓存策略
+                        Log.i("textfragment","缓存存在");
+                        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);    // 如果有缓存的话，则设置策略为CACHE_ELSE_NETWORK
+                    } else if(hasCache&&checkNetworkInfo()) {
+                        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则设置策略为NETWORK_ELSE_CACHE
+                    }
+                    query.findObjects(new FindListener<TextBmobInfo>(){
 
+                        @Override
+                        public void done(List<TextBmobInfo> list2, BmobException e) {
+                            if (e==null)
+                            {
+                                for(TextBmobInfo info: list2){
+                                    homeTextAdapterInfo = new HomeTextAdapterInfo();
+                                    homeTextAdapterInfo.setIv_head(R.drawable.olddriver);
+                                    homeTextAdapterInfo.setTv_name("老司机");
+                                    homeTextAdapterInfo.setTv_content(info.getContent());
+                                    list.add(homeTextAdapterInfo);
                                 }
-                                lv_text.setAdapter(homeTextBaseadpter);
+                                homeTextBaseadpter.notifyDataSetChanged();
+
+                            }else {
+
+                                return;
                             }
                         }
                     });
-
-
                     break;
                 case MSN:
                     page++;
                     query.order("-creat_time");
                     query.setLimit(limit);
                     query.setSkip(limit * page);
-                    query.findObjectsByTable(new QueryListener<JSONArray>() {
-                        @Override
-                        public void done(JSONArray jsonArray, BmobException e) {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                try {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    homeTextAdapterInfo = new HomeTextAdapterInfo();
-                                    homeTextAdapterInfo.setIv_head(R.drawable.olddriver);
-                                    homeTextAdapterInfo.setTv_name("老司机");
-                                    homeTextAdapterInfo.setTv_content(jsonObject.getString("content"));
-//                                        homeTextAdapterInfo.setTv_good(jsonObject.getString("good_count"));
-//                                        homeTextAdapterInfo.setTv_bad(jsonObject.getString("bad_count"));
-//                                        homeTextAdapterInfo.setTv_comment(jsonObject.getString("comment_count"));
-                                    list.add(homeTextAdapterInfo);
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                            homeTextBaseadpter.notifyDataSetChanged();
-                            lv_text.onLoadComplete();
-                        }
-                    });
+                    query.findObjects(new FindListener<TextBmobInfo>(){
+                                         @Override
+                                         public void done(List<TextBmobInfo> list2, BmobException e) {
+                                             if (e==null){
+                                             for(TextBmobInfo info: list2){
+                                                 HomeTextAdapterInfo homeTextAdapterInfo = new HomeTextAdapterInfo();
+                                                 homeTextAdapterInfo.setIv_head(R.drawable.olddriver);
+                                                 homeTextAdapterInfo.setTv_name("老司机");
+                                                 homeTextAdapterInfo.setTv_content(info.getContent());
+                                                 list.add(homeTextAdapterInfo);
+                                             }
+                                         }else {
+                                                 Toast.makeText(getActivity(), "网络异常", Toast.LENGTH_SHORT).show();
+                                                 return;
+                                             }
+                                         }
+                                     });
+
+                    homeTextBaseadpter.notifyDataSetChanged();
+                    lv_text.onLoadComplete();
                     break;
 
             }
@@ -125,12 +139,25 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lv_text = (ReflashListView) view.findViewById(R.id.lv_text);
-        query = new BmobQuery("TextBmobInfo");
+
+        query = new BmobQuery<TextBmobInfo>();
         lv_text.setInterface(this);
+        lv_text.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent=new Intent(getActivity(), MainActivity.class);
+//                intent.putExtra("key",head)
+//                startActivityForResult(intent,RQ);
+                startActivity(intent);
+
+            }
+        });
         textBmobInfo = new TextBmobInfo();
         list = new ArrayList<>();
         okHttpClient = new OkHttpClient();
         homeTextBaseadpter = new HomeTextBaseadpter(getActivity(), list);
+        lv_text.setAdapter(homeTextBaseadpter);
         startThread();
     }
 
@@ -183,5 +210,14 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
         }, 2000);
 
     }
-
+    public boolean checkNetworkInfo() {
+        ConnectivityManager conMan = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING)
+            return true;
+        if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING)
+            return true;
+        return false;
+    }
 }

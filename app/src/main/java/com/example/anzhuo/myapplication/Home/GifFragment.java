@@ -1,6 +1,9 @@
 package com.example.anzhuo.myapplication.Home;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,9 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anzhuo.myapplication.Adapter.HomeGifBaseadpter;
 import com.example.anzhuo.myapplication.AdapterInfo.HomeGifAdapterInfo;
+import com.example.anzhuo.myapplication.DataInfo.TextBmobInfo;
+import com.example.anzhuo.myapplication.DataInfo.TextInfo;
 import com.example.anzhuo.myapplication.R;
 import com.example.anzhuo.myapplication.ReflashListView.ReflashListView;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -23,9 +29,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import okhttp3.OkHttpClient;
 
@@ -40,71 +48,76 @@ public class GifFragment extends Fragment implements ReflashListView.IReflashLis
     OkHttpClient okHttpClient;
     final static int MSG = 11;
     final static int MSN = 12;
-    BmobQuery query;
+    BmobQuery<TextInfo> query;
     private int limit = 10;
     private int page = 0;
+    boolean isCache;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-                switch (msg.what) {
-                    case MSG:
-                        query.order("-creat_time");
-                        query.setLimit(limit);
-                        query.findObjectsByTable(new QueryListener<JSONArray>() {
-                            @Override
-                            public void done(JSONArray jsonArray, BmobException e) {
-                                if (e == null) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        try {
-                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            homeGifAdapterInfo = new HomeGifAdapterInfo();
-                                            homeGifAdapterInfo.setIv_head(R.drawable.olddriver);
-                                            homeGifAdapterInfo.setTv_name("老司机");
-                                            homeGifAdapterInfo.setTv_title(jsonObject.getString("title"));
-                                            homeGifAdapterInfo.setIv_content(jsonObject.getString("img"));
-                                            list.add(homeGifAdapterInfo);
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        }
-                                    }
-                                    lv_gif.setAdapter(homeGifBaseadpter);
-
+            switch (msg.what) {
+                case MSG:
+                    query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+                    query.order("-creat_time");
+                    query.setLimit(limit);
+                    isCache = query.hasCachedResult(TextInfo.class);
+                    query.setMaxCacheAge(TimeUnit.DAYS.toMillis(30));
+                    if (isCache&&!checkNetworkInfo()) {
+                        //--此为举个例子，并不一定按这种方式来设置缓存策略
+                        Log.i("textfragment","缓存存在");
+                        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ONLY);    // 如果有缓存的话，则设置策略为CACHE_ELSE_NETWORK
+                    } else if(isCache&&checkNetworkInfo()) {
+                        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则设置策略为NETWORK_ELSE_CACHE
+                    }
+                    query.findObjects(new FindListener<TextInfo>() {
+                        @Override
+                        public void done(List<TextInfo> mlist, BmobException e) {
+                            if (e == null) {
+                                for (TextInfo info : mlist) {
+                                    homeGifAdapterInfo = new HomeGifAdapterInfo();
+                                    homeGifAdapterInfo.setIv_head(R.drawable.olddriver);
+                                    homeGifAdapterInfo.setTv_name("老司机");
+                                    homeGifAdapterInfo.setTv_title(info.getTitle());
+                                    homeGifAdapterInfo.setIv_content(info.getImg());
+                                    list.add(homeGifAdapterInfo);
                                 }
+                                homeGifBaseadpter.notifyDataSetChanged();
+                            } else {
+                                return;
                             }
-                        });
-                        break;
-                    case MSN:
-                        page++;
-                        query.order("-creat_time");
-                        query.setLimit(limit);
-                        query.setSkip(limit * page);
-                        query.findObjectsByTable(new QueryListener<JSONArray>() {
-                            @Override
-                            public void done(JSONArray jsonArray, BmobException e) {
-                                if (e == null) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        try {
-                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            homeGifAdapterInfo = new HomeGifAdapterInfo();
-                                            homeGifAdapterInfo.setIv_head(R.drawable.olddriver);
-                                            homeGifAdapterInfo.setTv_name("老司机");
-                                            homeGifAdapterInfo.setTv_title(jsonObject.getString("title"));
-                                            homeGifAdapterInfo.setIv_content(jsonObject.getString("img"));
-                                            list.add(homeGifAdapterInfo);
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
-                                        }
-                                    }
-                                    homeGifBaseadpter.notifyDataSetChanged();
-                                    lv_gif.onLoadComplete();
+                        }
+                    });
+                    break;
+                case MSN:
+                    page++;
+                    query.order("-creat_time");
+                    query.setLimit(limit);
+                    query.setSkip(limit * page);
+                    query.findObjects(new FindListener<TextInfo>() {
+                        @Override
+                        public void done(List<TextInfo> mlist, BmobException e) {
+                            if (e == null) {
+                                for (TextInfo info : mlist) {
+                                    homeGifAdapterInfo = new HomeGifAdapterInfo();
+                                    homeGifAdapterInfo.setIv_head(R.drawable.olddriver);
+                                    homeGifAdapterInfo.setTv_name("老司机");
+                                    homeGifAdapterInfo.setTv_title(info.getTitle());
+                                    homeGifAdapterInfo.setIv_content(info.getImg());
+                                    list.add(homeGifAdapterInfo);
+                                }
+                            } else if (e!=null){
+                                Toast.makeText(getActivity(), "网络异常", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    });
+                    homeGifBaseadpter.notifyDataSetChanged();
+                    lv_gif.onLoadComplete();
 
-                            }
-                            }
-                        });
-                        break;
-                }
+                    break;
             }
+        }
     };
 
 
@@ -118,11 +131,12 @@ public class GifFragment extends Fragment implements ReflashListView.IReflashLis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Fresco.initialize(getActivity());
-        query = new BmobQuery("TextInfo");
+        query = new BmobQuery<TextInfo>();
         lv_gif = (ReflashListView) view.findViewById(R.id.lv_gif);
         lv_gif.setInterface(this);
         list = new ArrayList<>();
         homeGifBaseadpter = new HomeGifBaseadpter(getActivity(), list);
+        lv_gif.setAdapter(homeGifBaseadpter);
         okHttpClient = new OkHttpClient();
         startThread();
     }
@@ -178,7 +192,16 @@ public class GifFragment extends Fragment implements ReflashListView.IReflashLis
         }, 2000);
 
     }
-
+    public boolean checkNetworkInfo() {
+        ConnectivityManager conMan = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+        NetworkInfo.State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (mobile == NetworkInfo.State.CONNECTED || mobile == NetworkInfo.State.CONNECTING)
+            return true;
+        if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING)
+            return true;
+        return false;
+    }
 }
 
 

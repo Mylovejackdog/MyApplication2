@@ -1,6 +1,7 @@
 package com.example.anzhuo.myapplication.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.anzhuo.myapplication.Adapter.HomePictureBaseadapter;
@@ -107,14 +109,15 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
                                     homePictureAdapterInfo.setIv_content(info.getImg());
                                     list.add(homePictureAdapterInfo);
                                 }
+                                homePictureBaseadapter.notifyDataSetChanged();
+                                lv_pic.onLoadComplete();
                             } else {
                                 Toast.makeText(getActivity(), "网络异常", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         }
                     });
-                    homePictureBaseadapter.notifyDataSetChanged();
-                    lv_pic.onLoadComplete();
+
                     break;
             }
         }
@@ -136,6 +139,18 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
         lv_pic = (ReflashListView) view.findViewById(R.id.lv_pic);
         lv_pic.setInterface(this);
         list = new ArrayList<>();
+        lv_pic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent=new Intent(getActivity(), PictureCommentActivity.class);
+                intent.putExtra("head",list.get(i-1).getIv_head());
+                intent.putExtra("name",list.get(i-1).getTv_name());
+                intent.putExtra("title",list.get(i-1).getTv_title());
+                intent.putExtra("content",list.get(i-1).getIv_content());
+                startActivity(intent);
+
+            }
+        });
         homePictureBaseadapter = new HomePictureBaseadapter(getActivity(), list);
         lv_pic.setAdapter(homePictureBaseadapter);
         okHttpClient = new OkHttpClient();

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.anzhuo.myapplication.Adapter.HomeTextBaseadpter;
 import com.example.anzhuo.myapplication.AdapterInfo.HomeTextAdapterInfo;
 import com.example.anzhuo.myapplication.DataInfo.TextBmobInfo;
+import com.example.anzhuo.myapplication.DataInfo.TextInfo;
 import com.example.anzhuo.myapplication.MainActivity;
 import com.example.anzhuo.myapplication.R;
 import com.example.anzhuo.myapplication.ReflashListView.ReflashListView;
@@ -55,6 +56,7 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
     BmobQuery<TextBmobInfo> query;
     private int limit = 10;
     private int page = 0;
+    public static int RQ=1;
     boolean hasCache;
     Handler handler = new Handler() {
         @Override
@@ -113,6 +115,8 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
                                                  homeTextAdapterInfo.setTv_content(info.getContent());
                                                  list.add(homeTextAdapterInfo);
                                              }
+                                                 homeTextBaseadpter.notifyDataSetChanged();
+                                                 lv_text.onLoadComplete();
                                          }else {
                                                  Toast.makeText(getActivity(), "网络异常", Toast.LENGTH_SHORT).show();
                                                  return;
@@ -120,8 +124,7 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
                                          }
                                      });
 
-                    homeTextBaseadpter.notifyDataSetChanged();
-                    lv_text.onLoadComplete();
+
                     break;
 
             }
@@ -142,20 +145,20 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
 
         query = new BmobQuery<TextBmobInfo>();
         lv_text.setInterface(this);
-        lv_text.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Intent intent=new Intent(getActivity(), MainActivity.class);
-//                intent.putExtra("key",head)
-//                startActivityForResult(intent,RQ);
-                startActivity(intent);
-
-            }
-        });
         textBmobInfo = new TextBmobInfo();
         list = new ArrayList<>();
         okHttpClient = new OkHttpClient();
+        lv_text.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent=new Intent(getActivity(), TextCommentActivity.class);
+               intent.putExtra("head",list.get(i-1).getIv_head());
+               intent.putExtra("name",list.get(i-1).getTv_name());
+                intent.putExtra("content",list.get(i-1).getTv_content());
+                startActivityForResult(intent,RQ);
+
+            }
+        });
         homeTextBaseadpter = new HomeTextBaseadpter(getActivity(), list);
         lv_text.setAdapter(homeTextBaseadpter);
         startThread();

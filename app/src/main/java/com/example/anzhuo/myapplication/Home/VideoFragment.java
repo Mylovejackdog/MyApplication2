@@ -1,6 +1,7 @@
 package com.example.anzhuo.myapplication.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.example.anzhuo.myapplication.Adapter.HomeVideoBaseadpter;
@@ -109,11 +111,11 @@ public class VideoFragment extends Fragment implements ReflashListView.IReflashL
                                     list.add(homeVideoAdapterInfo);
 
                                 }
-
+                            homeVideoBaseadpter.notifyDataSetChanged();
+                            lv_video.onLoadComplete();
                         }
                     });
-                    homeVideoBaseadpter.notifyDataSetChanged();
-                    lv_video.onLoadComplete();
+
                     break;
             }
         }
@@ -134,6 +136,17 @@ public class VideoFragment extends Fragment implements ReflashListView.IReflashL
         lv_video = (ReflashListView) view.findViewById(R.id.lv_video);
         lv_video.setInterface(this);
         list = new ArrayList<>();
+        lv_video.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent=new Intent(getActivity(), VideoCommentActivity.class);
+                intent.putExtra("head",list.get(i-1).getIv_head());
+                intent.putExtra("name",list.get(i-1).getTv_name());
+                intent.putExtra("title",list.get(i-1).getTv_title());
+                intent.putExtra("content",list.get(i-1).getIv_content());
+                startActivity(intent);
+            }
+        });
         homeVideoBaseadpter = new HomeVideoBaseadpter(getActivity(), list);
         lv_video.setAdapter(homeVideoBaseadpter);
         okHttpClient = new OkHttpClient();

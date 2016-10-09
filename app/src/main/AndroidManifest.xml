@@ -32,6 +32,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Home.TextCommentActivity">
+
+        </activity>
+        <activity android:name=".Home.PictureCommentActivity">
+
+        </activity>
+        <activity android:name=".Home.GifCommentActivity">
+
+        </activity>
+        <activity android:name=".Home.VideoCommentActivity">
+
+        </activity>
+
     </application>
 
     </manifest>

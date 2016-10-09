@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ImageView
+    android:id="@+id/comment_head"
+    android:layout_width="50dp"
+    android:src="@drawable/olddriver"
+    android:layout_margin="8dp"
+    android:layout_height="50dp" />
+   <TextView
+       android:id="@+id/comment_name"
+       android:text="老司机"
+       android:textColor="#191919"
+       android:textSize="16sp"
+       android:layout_toRightOf="@+id/comment_head"
+       android:layout_alignTop="@+id/comment_head"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+  <TextView
+      android:id="@+id/comment_time"
+      android:text="10-8 15:31"
+      android:textSize="16sp"
+      android:layout_marginTop="8dp"
+      android:layout_alignLeft="@+id/comment_name"
+      android:layout_below="@+id/comment_name"
+      android:textColor="#191919"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/comment_content"
+        android:layout_below="@+id/comment_head"
+        android:layout_alignLeft="@+id/comment_name"
+        android:text="我是一名老司机"
+        android:textSize="16sp"
+        android:textColor="#191919"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

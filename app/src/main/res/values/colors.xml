@@ -12,4 +12,19 @@
     <color name="blue">#0000CD</color>
     <color name="orange">#FF8C00</color>
     <color name="red_a">#FF4646</color>
+    <color name="linen">#faf0e6</color>
+
+    <color name="normal_black">#262932</color>
+
+    <color name="night_tv_color">#ffdddddd</color>
+    <color name="night_title">#262932</color>
+    <color name="night_bg">#3A3743</color>
+    <color name="light_bg">#fff0f0f0</color>
+    <color name="button_bg">#4E89FF</color>
+    <color name="day_titlebar">#197d96</color>
+    <color name="day_text">#819a9a</color>
+    <color name="night_titlebar">#2A2A2A</color>
+    <color name="day_radiogroup">#FAEBD7</color>
+    <color name="night_radiogroup">#808069</color>
+
 </resources>

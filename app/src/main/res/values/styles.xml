@@ -16,7 +16,15 @@
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">16sp</item>
+    </style>
 
+    <style name="message">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:drawableRight">@drawable/common_icon_arrow_highlighted</item>
     </style>
     <style name="oldcar_a">
         <item name="android:textColor">@color/hover_color</item>
@@ -26,6 +34,39 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">16sp</item>
 
+    </style>
+<!--夜间模式设置-->
+    <style name="DayTheme" parent="AppTheme">
+        <item name="titleBarColor">#ff4646</item>
+        <item name="textColor">@color/day_text</item>
+        <item name="textBackground">@color/white</item>
+        <item name="titletextColor">@color/white</item>
+        <item name="imageValue">@drawable/day</item>
+        <item name="RadioGroupColor">@color/day_radiogroup</item>
+        </style>
+
+    <style name="NightTheme" parent="AppTheme">
+        <item name="titleBarColor">@color/night_radiogroup</item>
+        <item name="textColor">@color/white</item>
+        <item name="titletextColor">@color/white</item>
+        <item name="textBackground">@color/night_titlebar</item>
+        <item name="imageValue">@drawable/night</item>
+        <item name="RadioGroupColor">@color/night_radiogroup</item>
+        </style>
+
+<!--字体大小设置-->
+    <style name="Theme_Small">
+        <item name="fontsize_1">20sp</item>
+    </style>
+    <style name="Theme_Medium">
+        <item name="fontsize_1">25sp</item>
+    </style>
+    <style name="Theme_Large">
+        <item name="fontsize_1">30sp</item>
+    </style>
+    <!--  为相应的控件设置style -->
+    <style name="title_text">
+        <item name="android:textSize">?attr/fontsize_1</item>
     </style>
 
 </resources>

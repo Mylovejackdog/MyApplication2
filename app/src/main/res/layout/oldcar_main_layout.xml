@@ -10,12 +10,15 @@
         android:layout_height="0dp"
         android:layout_weight="1"></FrameLayout>
 
+
     <RadioGroup
         android:id="@+id/rg_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/gray"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <RadioButton
             android:id="@+id/rb_home"
@@ -29,7 +32,6 @@
             android:id="@+id/rb_audit"
             style="@style/oldcar"
             android:layout_height="wrap_content"
-            android:checked="false"
             android:background="@drawable/div_background"
             android:drawableTop="@drawable/audit_check"
             android:text="审核" />
@@ -37,9 +39,8 @@
         <RadioButton
             android:id="@+id/rb_message"
             style="@style/oldcar"
-            android:checked="false"
-            android:background="@drawable/div_background"
             android:layout_height="wrap_content"
+            android:background="@drawable/div_background"
             android:drawableTop="@drawable/message_check"
             android:text="消息" />
 

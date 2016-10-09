@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.0"
+
 
     defaultConfig {
         applicationId "com.example.anzhuo.myapplication"
@@ -20,16 +21,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    //改圆形图片
     compile 'com.facebook.fresco:fresco:0.12.0'
-
     //以下SDK开发者请根据需要自行选择
     //bmob-sdk：Bmob的android sdk包，包含了Bmob的数据存储、文件等服务，以下是最新的bmob-sdk:
     //3.5.0：请务必查看下面注释[1]
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile files('libs/mta-sdk-1.6.2.jar')
+    //slideswitch包自定义滑动按钮
+    compile 'com.leaking.slideswitch:slideswitch:1.0.0'
+
  //  图片加载
     compile 'com.github.bumptech.glide:glide:3.5.2'
 

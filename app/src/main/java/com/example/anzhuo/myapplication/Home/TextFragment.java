@@ -21,7 +21,7 @@ import com.example.anzhuo.myapplication.Adapter.HomeTextBaseadpter;
 import com.example.anzhuo.myapplication.AdapterInfo.HomeTextAdapterInfo;
 import com.example.anzhuo.myapplication.DataInfo.TextBmobInfo;
 import com.example.anzhuo.myapplication.DataInfo.TextInfo;
-import com.example.anzhuo.myapplication.MainActivity;
+
 import com.example.anzhuo.myapplication.R;
 import com.example.anzhuo.myapplication.ReflashListView.ReflashListView;
 

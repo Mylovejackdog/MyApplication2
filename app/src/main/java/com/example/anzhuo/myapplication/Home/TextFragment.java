@@ -124,7 +124,6 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
                                          }
                                      });
 
-
                     break;
 
             }

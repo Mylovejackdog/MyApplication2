@@ -1,13 +1,14 @@
 package com.example.anzhuo.myapplication.My;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
 
 /**
  * Created by anzhuo on 2016/9/18.
  */
-public class Info extends BmobObject {
+public class Info extends BmobUser {
     private String user;
     private String pwd;
     private String phone;

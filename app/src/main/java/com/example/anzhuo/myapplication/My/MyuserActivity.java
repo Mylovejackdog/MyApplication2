@@ -33,7 +33,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class MyuserActivity extends Activity implements View.OnClickListener {
     public ImageView iv_back;
     public EditText  et_user;
-    public EditText  et_phone;
+    public EditText  et_nickname;
     public EditText  et_pwd;
     public EditText  et_infopwd;
     public TextView  tv_code;
@@ -43,33 +43,31 @@ public class MyuserActivity extends Activity implements View.OnClickListener {
     String phone;
     String user;
     String input;
+    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_user_layout);
         Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
+        userInfo=new UserInfo();
         iv_back= (ImageView) findViewById(R.id.iv_back);
         et_user= (EditText) findViewById(R.id.et_user);
-        et_phone= (EditText) findViewById(R.id.et_phone);
+        et_nickname= (EditText) findViewById(R.id.et_nickname);
         et_pwd= (EditText) findViewById(R.id.et_pwd);
         et_infopwd= (EditText) findViewById(R.id.et_infopwd);
         et_input= (EditText) findViewById(R.id.et_input);
         tv_code= (TextView) findViewById(R.id.tv_code);
         bt_enter= (Button) findViewById(R.id.bt_enter);
 
-
         iv_back.setOnClickListener(this);
         et_user.setOnClickListener(this);
-        et_phone.setOnClickListener(this);
+        et_nickname.setOnClickListener(this);
         et_pwd.setOnClickListener(this);
         et_infopwd.setOnClickListener(this);
         et_input.setOnClickListener(this);
         tv_code.setOnClickListener(this);
         bt_enter.setOnClickListener(this);
-
-
-
 
     }
 
@@ -82,60 +80,47 @@ public class MyuserActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.tv_code:
-                tv_code.setText(random());
+                input=random();
+                tv_code.setText(input);
                 break;
             case R.id.bt_enter:
-                input=et_input.getText().toString();
-                BmobQuery query=new BmobQuery("Info");
-                query.findObjectsByTable(new QueryListener<JSONArray>() {
-                    @Override
-                    public void done(JSONArray jsonArray, BmobException e) {
-                        if (e == null) {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                try {
-                                        JSONObject object = jsonArray.getJSONObject(i);
-                                        phone = object.getString("phone");
-                                        user = object.getString("user");
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                              if (et_user.getText().toString().equals(user)||et_phone.getText().toString().equals(phone)) {
-                                    Log.i("info", "1237895645"+ "");
-                                    Toast.makeText(MyuserActivity.this, "该账号已存在,请重新输入账号", Toast.LENGTH_SHORT).show();
-                                    START = 1;
-                                }else {
-                                  if (!et_user.getText().toString().equals(user)&&!et_phone.getText().toString().equals(phone)){
-                                    Info info = new Info();
-                                    info.setUser(et_user.getText().toString());
-                                    info.setPwd(et_pwd.getText().toString());
-                                    info.setPhone(et_phone.getText().toString());
-                                    info.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if (e == null) {
-                                                if (et_pwd.getText().toString().equals(et_infopwd.getText().toString()) && input.equals(tv_code.getText())) {
-                                                    Log.i("info", "12335445" + "");
-                                                    Toast.makeText(MyuserActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                                                    finish();
-                                                } else {
-                                                    Log.i("info", "123456" + "");
-                                                    Toast.makeText(MyuserActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Log.i("info", "123" + "");
-                                                Toast.makeText(MyuserActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
-                                            }
+                if (et_user.getText().toString().equals("")||et_nickname.getText().toString().equals("")){
+                    Log.i("LW", "123456");
+                    Toast.makeText(MyuserActivity.this,"请输入账号或昵称！",Toast.LENGTH_SHORT).show();
+                }else {
+                    if (et_input.getText().toString().equals(input)){
+                        if (et_user!=null&&et_infopwd.getText().toString().equals(et_pwd.getText().toString())){
+                            Log.i("LW", "12345");
+                            userInfo.setPassword(et_pwd.getText().toString());
+                            userInfo.setUsername(et_user.getText().toString());
+                            userInfo.setNickname(et_nickname.getText().toString());
+                            userInfo.signUp(new SaveListener<UserInfo>() {
+                                @Override
+                                public void done(UserInfo userInfo, BmobException e) {
+                                    if (e == null) {
+                                        Log.i("LW", "1234");
+                                        Intent intent = new Intent(MyuserActivity.this, Myenteractivity.class);
+                                        startActivity(intent);
+                                        Toast.makeText(MyuserActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        if (e.getMessage().toString().equals("user'" + et_user.getText().toString() + "'already taken")) {
+                                            Log.i("LW", "123");
+                                            Toast.makeText(MyuserActivity.this, "注册失败：该用户已存在", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Log.i("LW", "12");
+                                            Toast.makeText(MyuserActivity.this, "注册失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
-                                    });
+                                    }
                                 }
-                              }
-
+                            });
+                        }else {
+                            Toast.makeText(MyuserActivity.this,"请输入相同的密码！",Toast.LENGTH_SHORT).show();
                         }
+                    }else {
+                        Toast.makeText(MyuserActivity.this,"验证码不正确，请重新输入！",Toast.LENGTH_SHORT).show();
                     }
-        });
-
-
+                }
                 break;
     }
     }

@@ -8,14 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="6dp"
-        android:background="#dcdcdc"
+        android:background="#ff4646"
         >
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back_two"
+            android:src="@drawable/register_back"
             />
         <TextView
             android:layout_width="0dp"
@@ -23,6 +24,7 @@
             android:layout_height="wrap_content"
             android:text="账号管理"
             android:textSize="30sp"
+            android:textColor="@color/white"
             android:gravity="center"
             />
         <ImageView
@@ -37,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:src="@drawable/head"
+        android:src="@drawable/main_head"
         android:layout_gravity="center_horizontal"
         />
     <LinearLayout
@@ -75,7 +77,6 @@
             android:layout_height="wrap_content"
             android:text="性别"
             android:textSize="25sp"
-
             />
         <TextView
             android:layout_width="0dp"
@@ -103,24 +104,37 @@
                 />
         </RadioGroup>
     </LinearLayout>
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="签名"
-        android:textSize="25sp"
-        android:padding="8dp"
-        />
-    <EditText
-        android:id="@+id/signature"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="1dp"
         android:background="@color/white"
-        />
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="签名"
+            android:textSize="25sp"
+            android:padding="8dp"
+            />
+        <EditText
+            android:id="@+id/signature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:padding="8dp"
+            android:hint="这个人很懒，什么都没有留下..."
+            android:background="@color/white"
+            />
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="账号绑定"
+        android:background="@color/white"
+        android:layout_marginTop="30dp"
         android:textSize="25sp"
         android:padding="8dp"
         />
@@ -130,13 +144,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
+        android:layout_marginTop="1dp"
         android:padding="8dp"
         android:background="@color/white"
         >
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:src="@drawable/set"
+            android:src="@drawable/phone1"
             />
         <TextView
             android:layout_width="0dp"
@@ -165,7 +180,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/set"
+            android:src="@drawable/qq_a"
             />
         <TextView
             android:layout_width="0dp"
@@ -194,7 +209,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/set"
+            android:src="@drawable/weixin"
             />
         <TextView
             android:layout_width="0dp"
@@ -215,10 +230,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@color/white"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:background="#ff4646"
         android:text="退出登入"
         android:padding="8dp"
         android:textSize="25sp"
+        android:textColor="@color/white"
         />
 
 

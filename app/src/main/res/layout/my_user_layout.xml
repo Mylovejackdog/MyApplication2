@@ -74,12 +74,12 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-            android:text="电话"
+            android:text="昵称"
             android:gravity="center"
             android:textSize="20sp"
             />
         <EditText
-            android:id="@+id/et_phone"
+            android:id="@+id/et_nickname"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"

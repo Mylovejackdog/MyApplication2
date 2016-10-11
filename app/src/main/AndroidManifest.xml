@@ -43,10 +43,7 @@
 
         <activity android:name=".MyActivity"></activity>
         <activity android:name=".Main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".My.Myactivity">
 
@@ -56,7 +53,10 @@
         </activity>
         <activity android:name=".My.Myheadactivity"></activity>
         <activity android:name=".My.MyuserActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".My.Myenteractivity">
 

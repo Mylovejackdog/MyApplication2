@@ -23,6 +23,7 @@ import com.example.anzhuo.myapplication.Utils.MainApplication;
 import com.example.anzhuo.myapplication.Utils.Util;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.auth.QQAuth;
+import com.tencent.stat.StatGameUser;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -31,10 +32,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by anzhuo on 2016/9/13.
@@ -44,7 +49,7 @@ public class Myenteractivity extends Activity {
     public static String mAppid;
  //   private TextView mUserInfo;
  //   private ImageView mUserLogo;
-    private ImageView mNewLoginButton;
+    private Button mNewLoginButton;
 
     private UserInfo mInfo;
     private Tencent mTencent;
@@ -57,8 +62,10 @@ public class Myenteractivity extends Activity {
     public TextView  tv_forget;
     public TextView  tv_register;
     public LinearLayout ll_qqenter;
+    public TextView   tv_manage;
     String user;
     String pwd;
+    com.example.anzhuo.myapplication.My.UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +81,7 @@ public class Myenteractivity extends Activity {
         et_pwd= (EditText) findViewById(R.id.et_pwd);
         bt_enter= (Button) findViewById(R.id.bt_enter);
         tv_forget= (TextView) findViewById(R.id.tv_forget);
+        tv_manage= (TextView) findViewById(R.id.tv_manage);
         tv_register= (TextView) findViewById(R.id.tv_register);
        ll_qqenter= (LinearLayout) findViewById(R.id.ll_qqenter);
 
@@ -89,29 +97,19 @@ public class Myenteractivity extends Activity {
         bt_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BmobQuery query=new BmobQuery("Info");
-                query.findObjectsByTable(new QueryListener<JSONArray>() {
+                userInfo=new com.example.anzhuo.myapplication.My.UserInfo();
+                userInfo.setUsername(et_user.getText().toString());
+                userInfo.setPassword(et_pwd.getText().toString());
+                userInfo.login(new SaveListener<com.example.anzhuo.myapplication.My.UserInfo>() {
                     @Override
-                    public void done(JSONArray jsonArray, BmobException e) {
+                    public void done(com.example.anzhuo.myapplication.My.UserInfo userInfo, BmobException e) {
                         if (e==null){
-                            for (int i=0;i<jsonArray.length();i++){
-                                try {
-                                    JSONObject object=jsonArray.getJSONObject(i);
-                                    user=object.getString("user");
-                                    pwd=object.getString("pwd");
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                }
-
-                            }if (et_user.getText().toString().equals(user)&&et_pwd.getText().toString().equals(pwd)){
-                                Toast.makeText(Myenteractivity.this,"登录成功",Toast.LENGTH_SHORT).show();
-                                Intent intent=new Intent(Myenteractivity.this,Myactivity.class);
-                                startActivity(intent);
-                                finish();
-                                Log.i("Info","123456");
-                            }else {
-                                Toast.makeText(Myenteractivity.this,"登录失败，请重新输入",Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(Myenteractivity.this,"登入成功",Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(Myenteractivity.this,Myactivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            Toast.makeText(Myenteractivity.this,"登入成功",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -131,6 +129,13 @@ public class Myenteractivity extends Activity {
                 startActivity(intent);
             }
         });
+        tv_manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent4=new Intent(Myenteractivity.this,Myheadactivity.class);
+                startActivity(intent4);
+            }
+        });
 
     }
 
@@ -146,7 +151,7 @@ protected void onStart() {
 }
 
     private void initViews() {
-        mNewLoginButton= (ImageView) findViewById(R.id.new_login_btn);
+        mNewLoginButton= (Button) findViewById(R.id.new_login_btn);
         LinearLayout linearLayout= (LinearLayout) findViewById(R.id.main_container);
         View.OnClickListener listener = new NewClickListener();
         for (int i=0;i<linearLayout.getChildCount();i++){

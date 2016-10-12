@@ -100,6 +100,9 @@
         <activity android:name=".Home.VideoCommentActivity">
 
         </activity>
+        <activity android:name=".My.MyheadphotoActivity">
+
+        </activity>
 
     </application>
 

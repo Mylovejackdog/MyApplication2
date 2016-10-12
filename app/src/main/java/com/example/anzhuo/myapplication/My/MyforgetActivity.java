@@ -52,7 +52,7 @@ public class MyforgetActivity extends Activity implements View.OnClickListener {
         et_phone.setOnClickListener(this);
         bt_affirm.setOnClickListener(this);
 
-        Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
+      //  Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
     }
 
     @Override

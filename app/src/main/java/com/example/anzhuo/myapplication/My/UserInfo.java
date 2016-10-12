@@ -1,6 +1,7 @@
 package com.example.anzhuo.myapplication.My;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by anzhuo on 2016/10/11.
@@ -10,7 +11,7 @@ public class UserInfo extends BmobUser {
     private String nickname;
     private boolean gender;
     private String phoneNumber;
-    private String head;
+    private BmobFile head;
 
     public Integer getAge() {
         return age;
@@ -42,11 +43,12 @@ public class UserInfo extends BmobUser {
         this.nickname = nickname;
     }
 
-    public String getHead() {
+
+    public BmobFile getHead() {
         return head;
     }
 
-    public void setHead(String head) {
+    public void setHead(BmobFile head) {
         this.head = head;
     }
 }

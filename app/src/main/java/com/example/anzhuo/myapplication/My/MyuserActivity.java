@@ -49,7 +49,7 @@ public class MyuserActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_user_layout);
-        Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
+      //  Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
         userInfo=new UserInfo();
         iv_back= (ImageView) findViewById(R.id.iv_back);
         et_user= (EditText) findViewById(R.id.et_user);

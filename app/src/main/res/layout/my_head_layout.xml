@@ -1,243 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="6dp"
         android:background="#ff4646"
-        >
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="6dp">
+
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/register_back"
-            />
+            android:src="@drawable/register_back" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="账号管理"
-            android:textSize="30sp"
-            android:textColor="@color/white"
+            android:layout_weight="1"
             android:gravity="center"
-            />
+            android:text="账号管理"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/back_two"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
     </LinearLayout>
+
     <ImageView
         android:id="@+id/iv_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:src="@drawable/main_head"
-        android:layout_gravity="center_horizontal"
-        />
+        android:src="@drawable/main_head" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
         android:background="@color/white"
-        android:padding="8dp"
         android:gravity="center"
-        >
+        android:orientation="horizontal"
+        android:padding="8dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="用户名"
-            android:textSize="25sp"
-            />
+            android:text="手机"
+            android:textSize="25sp" />
+
         <EditText
-            android:id="@+id/user"
+            android:id="@+id/et_phone"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_weight="1" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="horizontal"
         android:layout_marginTop="1dp"
+        android:background="@color/white"
         android:gravity="center"
-        android:padding="8dp"
-        >
+        android:orientation="horizontal"
+        android:padding="8dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="性别"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <RadioGroup
             android:id="@+id/rg_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <RadioButton
                 android:id="@+id/rb_man"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="男"
-                android:textSize="25sp"
-                />
+                android:textSize="25sp" />
+
             <RadioButton
                 android:id="@+id/rb_woman"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="女"
-                android:textSize="25sp"
-                />
+                android:textSize="25sp" />
         </RadioGroup>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="1dp"
         android:background="@color/white"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="签名"
-            android:textSize="25sp"
             android:padding="8dp"
-            />
+            android:text="签名"
+            android:textSize="25sp" />
+
         <EditText
             android:id="@+id/signature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:padding="8dp"
-            android:hint="这个人很懒，什么都没有留下..."
             android:background="@color/white"
-            />
+            android:hint="这个人很懒，什么都没有留下..."
+            android:padding="8dp" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="账号绑定"
-        android:background="@color/white"
         android:layout_marginTop="30dp"
-        android:textSize="25sp"
+        android:background="@color/white"
         android:padding="8dp"
-        />
+        android:text="账号绑定"
+        android:textSize="25sp" />
+
     <LinearLayout
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_marginTop="1dp"
-        android:padding="8dp"
         android:background="@color/white"
-        >
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:src="@drawable/phone1"
-            />
+            android:layout_height="wrap_content"
+            android:src="@drawable/phone1" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="手机绑定"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点击绑定"
-            android:textColor="@color/red"
-            />
+            android:textColor="@color/red" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_qq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="8dp"
         android:background="@color/white"
-        >
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/qq_a"
-            />
+            android:src="@drawable/qq_a" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="QQ绑定"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点击绑定"
-            android:textColor="@color/red"
-            />
+            android:textColor="@color/red" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ll_weixin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="8dp"
         android:background="@color/white"
-        >
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/weixin"
-            />
+            android:src="@drawable/weixin" />
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="微信绑定"
-            android:textSize="25sp"
-            />
+            android:textSize="25sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="点击绑定"
-            android:textColor="@color/red"
-            />
+            android:textColor="@color/red" />
     </LinearLayout>
+
     <Button
         android:id="@+id/bt_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="100dp"
         android:layout_marginRight="100dp"
+        android:layout_marginTop="20dp"
         android:background="#ff4646"
-        android:text="退出登入"
         android:padding="8dp"
-        android:textSize="25sp"
+        android:text="退出登入"
         android:textColor="@color/white"
-        />
+        android:textSize="25sp" />
 
 
 </LinearLayout>

@@ -114,27 +114,6 @@ public class Myenteractivity extends Activity {
                         }
                     }
                 });
-                /*BmobUser bmobUser=new BmobUser();
-                bmobUser.setUsername(et_user.getText().toString());
-                bmobUser.setPassword(et_pwd.getText().toString());
-                bmobUser.login(new SaveListener<BmobUser>() {
-                    @Override
-                    public void done(BmobUser bmobUser, BmobException e) {
-                        if (e==null){
-                            Log.i("LW","1234");
-                            Toast.makeText(Myenteractivity.this,"登入成功",Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(Myenteractivity.this,Myactivity.class);
-                            startActivity(intent);
-                            finish();
-                        }else {
-<<<<<<< HEAD
-                            Log.i("LW","123");
-=======
->>>>>>> origin/master
-                            Toast.makeText(Myenteractivity.this,"登入失败",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
             }
         });
         tv_forget.setOnClickListener(new View.OnClickListener() {
@@ -324,5 +303,4 @@ protected void onStart() {
             }
         }
     }
-
 }

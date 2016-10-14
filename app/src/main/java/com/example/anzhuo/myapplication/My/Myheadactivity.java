@@ -78,7 +78,7 @@ public class Myheadactivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_back:
-                Intent intent=new Intent(Myheadactivity.this,Myenteractivity.class);
+                Intent intent=new Intent(Myheadactivity.this,Myactivity.class);
                 startActivity(intent);
                 finish();
                 break;

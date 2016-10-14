@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/red_a"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp">
         <ImageView
             android:id="@+id/iv_my"
             android:layout_width="wrap_content"
@@ -16,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:textSize="25sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/white"

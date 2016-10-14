@@ -41,6 +41,7 @@
         android:padding="8dp"
         android:text="返回登入"
         android:textSize="30sp"
-        android:background="@color/green"
+        android:textColor="@color/white"
+        android:background="#ff4646"
         />
 </LinearLayout>

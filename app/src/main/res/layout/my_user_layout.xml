@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="注册"
-        android:textSize="30sp"
+        android:textSize="25sp"
             android:textColor="@color/white"
         android:gravity="center"
         />

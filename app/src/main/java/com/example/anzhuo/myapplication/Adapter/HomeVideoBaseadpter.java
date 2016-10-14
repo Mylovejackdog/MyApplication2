@@ -73,7 +73,7 @@ public class HomeVideoBaseadpter extends BaseAdapter {
         viewHolder.iv_head.setImageResource(homeVideoAdapterInfo.getIv_head());
         viewHolder.tv_name.setText(homeVideoAdapterInfo.getTv_name());
         viewHolder.tv_title.setText(homeVideoAdapterInfo.getTv_title());
-        viewHolder.iv_content.setUp(homeVideoAdapterInfo.getIv_content(), JCVideoPlayer.SCREEN_LAYOUT_LIST,"老司机出品");
+        viewHolder.iv_content.setUp(homeVideoAdapterInfo.getIv_content(),JCVideoPlayer.SCREEN_LAYOUT_LIST,"老司机出品");
         viewHolder.tv_good.setText(homeVideoAdapterInfo.getTv_good());
         viewHolder.tv_bad.setText(homeVideoAdapterInfo.getTv_bad());
         viewHolder.tv_comment.setText(homeVideoAdapterInfo.getTv_comment());

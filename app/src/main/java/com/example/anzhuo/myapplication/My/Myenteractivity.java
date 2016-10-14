@@ -109,7 +109,7 @@ public class Myenteractivity extends Activity {
                             startActivity(intent);
                             finish();
                         }else {
-                            Toast.makeText(Myenteractivity.this,"登入成功",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Myenteractivity.this,"登入失败",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

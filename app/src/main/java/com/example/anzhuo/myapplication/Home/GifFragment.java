@@ -133,7 +133,6 @@ public class GifFragment extends Fragment implements ReflashListView.IReflashLis
 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Fresco.initialize(getActivity());
         query = new BmobQuery<TextInfo>();
         lv_gif = (ReflashListView) view.findViewById(R.id.lv_gif);
         lv_gif.setInterface(this);

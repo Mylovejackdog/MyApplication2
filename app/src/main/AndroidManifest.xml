@@ -44,6 +44,11 @@
 
         <activity android:name=".MyActivity"></activity>
         <activity android:name=".Main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity android:name=".My.Myactivity">
@@ -101,11 +106,26 @@
         <activity android:name=".My.MyheadphotoActivity">
 
         </activity>
+        <activity android:name=".Home.RecommendTextActivity">
+
+        </activity>
+        <activity android:name=".Home.RecomendPicActivity">
+
+        </activity>
+        <activity android:name=".Home.RecomendGifActivity">
+
+        </activity>
+        <activity android:name=".Home.RecomendVideoActivity">
+
+        </activity>
+        <activity android:name=".Home.ImageShowerActivity">
+
+        </activity>
+        <activity android:name=".Home.GifShowerActivity">
+
+        </activity>
         <activity android:name=".Audit.AuditContributeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".Audit.AuditSdardAtivity">
 

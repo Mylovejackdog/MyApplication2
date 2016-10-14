@@ -9,6 +9,7 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
     <ImageView
+        android:id="@+id/iv_person"
          android:src="@drawable/person"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -22,6 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
     <ImageView
+        android:id="@+id/iv_write"
         android:src="@drawable/write"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

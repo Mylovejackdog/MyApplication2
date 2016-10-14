@@ -127,7 +127,10 @@ public class Myenteractivity extends Activity {
                             startActivity(intent);
                             finish();
                         }else {
+<<<<<<< HEAD
                             Log.i("LW","123");
+=======
+>>>>>>> origin/master
                             Toast.makeText(Myenteractivity.this,"登入失败",Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -1,6 +1,7 @@
 package com.example.anzhuo.myapplication.Home;
 
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,9 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import com.example.anzhuo.myapplication.Adapter.HomeAdapter;
+import com.example.anzhuo.myapplication.My.Myactivity;
 import com.example.anzhuo.myapplication.R;
 
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ public class HomeFragment extends Fragment {
     ViewPager vp_main;
     HomeAdapter homeAdapter;
     RadioGroup rg_head;
+    ImageView iv_person;
+    ImageView iv_write;
 
     @Nullable
     @Override
@@ -43,6 +48,15 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         vp_main = (ViewPager) view.findViewById(R.id.vp_main);
         rg_head = (RadioGroup) view.findViewById(R.id.rg_head);
+        iv_person= (ImageView) view.findViewById(R.id.iv_person);
+        iv_write= (ImageView) view.findViewById(R.id.iv_write);
+        iv_person.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), Myactivity.class);
+                startActivity(intent);
+            }
+        });
         list = new ArrayList<>();
         recommendActivity = new RecommendFragment();
         textActivity = new TextFragment();

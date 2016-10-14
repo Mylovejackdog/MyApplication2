@@ -39,6 +39,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import okhttp3.OkHttpClient;
 
+
 /**
  * Created by anzhuo on 2016/9/9.
  */
@@ -134,7 +135,6 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Fresco.initialize(getActivity());
         query = new BmobQuery<Info>();
         lv_pic = (ReflashListView) view.findViewById(R.id.lv_pic);
         lv_pic.setInterface(this);

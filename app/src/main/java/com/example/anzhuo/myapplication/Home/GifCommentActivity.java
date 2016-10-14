@@ -30,6 +30,7 @@ public class GifCommentActivity extends Activity{
     TextCommentBaseadapter textCommentBaseadapter;
     List<CommentAdapterInfo> list;
     CommentAdapterInfo commentAdapterInfo;
+    Intent intent;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gifcomment_activity);
@@ -46,23 +47,21 @@ public class GifCommentActivity extends Activity{
             }
         });
         list=new ArrayList<>();
-        Intent intent=getIntent();
+         intent=getIntent();
         iv_head.setImageResource(intent.getExtras().getInt("head"));
         tv_name.setText(intent.getExtras().getString("name"));
         tv_title.setText(Html.fromHtml(intent.getExtras().getString("title")));
         Glide.with(this).load(intent.getExtras().getString("content")).asGif().override(600,800
         ).fitCenter().diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.load).into(iv_content);
-//        for (int i=0;i<20;i++){
-//            commentAdapterInfo=new CommentAdapterInfo();
-//            commentAdapterInfo.setComment_head(R.drawable.olddriver);
-//            commentAdapterInfo.setComment_name("老司机");
-//            commentAdapterInfo.setComment_time("2016-10-8 16:59");
-//            commentAdapterInfo.setComment_content("你好吗");
-//            list.add(commentAdapterInfo);
-//        }
-//       textCommentBaseadapter=new TextCommentBaseadapter(this,list);
-//        pic_comment_lv.setAdapter(textCommentBaseadapter);
 
+        iv_content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(GifCommentActivity.this, GifShowerActivity.class);
+                intent1.putExtra("contentsrc",intent.getExtras().getString("content"));
+                startActivity(intent1);
+            }
+        });
     }
 
 }

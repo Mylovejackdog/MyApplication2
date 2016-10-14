@@ -141,7 +141,6 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lv_text = (ReflashListView) view.findViewById(R.id.lv_text);
-
         query = new BmobQuery<TextBmobInfo>();
         lv_text.setInterface(this);
         textBmobInfo = new TextBmobInfo();
@@ -155,7 +154,6 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
                intent.putExtra("name",list.get(i-1).getTv_name());
                 intent.putExtra("content",list.get(i-1).getTv_content());
                 startActivityForResult(intent,RQ);
-
             }
         });
         homeTextBaseadpter = new HomeTextBaseadpter(getActivity(), list);

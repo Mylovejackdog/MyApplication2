@@ -11,10 +11,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.anzhuo.myapplication.AdapterInfo.HomePictureAdapterInfo;
-import com.example.anzhuo.myapplication.AdapterInfo.HomeTextAdapterInfo;
+
 import com.example.anzhuo.myapplication.R;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
+
 
 import java.util.List;
 
@@ -67,8 +66,7 @@ public class HomePictureBaseadapter extends BaseAdapter {
         viewHolder.iv_head.setImageResource(homePictureAdapterInfo.getIv_head());
         viewHolder.tv_name.setText(homePictureAdapterInfo.getTv_name());
         viewHolder.tv_title.setText(homePictureAdapterInfo.getTv_title());
-        Glide.with(context).load(homePictureAdapterInfo.getIv_content()).asBitmap().override(600,800
-        ).fitCenter().diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.load).into(viewHolder.iv_content);
+        Glide.with(context).load(homePictureAdapterInfo.getIv_content()).asBitmap().override(800,600).fitCenter().diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.load).into(viewHolder.iv_content);
         viewHolder.tv_good.setText(homePictureAdapterInfo.getTv_good());
         viewHolder.tv_bad.setText(homePictureAdapterInfo.getTv_bad());
         viewHolder.tv_comment.setText(homePictureAdapterInfo.getTv_comment());

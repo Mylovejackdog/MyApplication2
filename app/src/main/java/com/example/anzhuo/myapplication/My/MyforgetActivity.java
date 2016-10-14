@@ -69,14 +69,14 @@ public class MyforgetActivity extends Activity implements View.OnClickListener {
         }
     }
     public  void alter(){
-        final BmobQuery<Info> user=new BmobQuery<Info>();
-        user.addWhereEqualTo("user", et_user.getText().toString());
-        BmobQuery<Info> phone=new BmobQuery<Info>();
-        phone.addWhereEqualTo("phone", et_phone.getText().toString());
-        List<BmobQuery<Info>> query1=new ArrayList<BmobQuery<Info>>();
+        final BmobQuery<UserInfo> user=new BmobQuery<UserInfo>();
+        user.addWhereEqualTo("username", et_user.getText().toString());
+        BmobQuery<UserInfo> phone=new BmobQuery<UserInfo>();
+        phone.addWhereEqualTo("phonenumber", et_phone.getText().toString());
+        List<BmobQuery<UserInfo>> query1=new ArrayList<BmobQuery<UserInfo>>();
         query1.add(user);
         query1.add(phone);
-        BmobQuery query=new BmobQuery("Info");
+        BmobQuery query=new BmobQuery("UserInfo");
         query.and(query1);
        query.findObjectsByTable(new QueryListener<JSONArray>() {
            @Override
@@ -84,7 +84,7 @@ public class MyforgetActivity extends Activity implements View.OnClickListener {
                if (e == null) {
                    try {
                        JSONObject object = jsonArray.getJSONObject(0);
-                       pwd = object.getString("pwd");
+                       pwd = object.getString("password");
                        Log.i("Lw", pwd);
                        Toast.makeText(MyforgetActivity.this,"查询成功",Toast.LENGTH_SHORT).show();
                        Intent intent=new Intent(MyforgetActivity.this,MyrightActivity.class);

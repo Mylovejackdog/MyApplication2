@@ -2,6 +2,7 @@ package com.example.anzhuo.myapplication.Audit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,7 @@ public class AuditContributeActivity extends Activity {
     private static final int REQ_1=1;
     String photopath;
     BmobFile bmobFile;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +55,18 @@ public class AuditContributeActivity extends Activity {
         iv_pic= (ImageView) findViewById(R.id.iv_pic);
         iv_camera= (ImageView) findViewById(R.id.iv_camera);
         tv_num= (TextView) findViewById(R.id.tv_num);
-        Bmob.initialize(this, "91b01d0762aeef4a44f5c599dd65e938");
+        Bmob.initialize(this, "a914836045e7de6a29035e84e62b59e7");
         et_content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (i<=i1){
+                    tv_submit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(AuditContributeActivity.this,"请再多输入文字",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
             @Override
             public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
@@ -67,7 +76,7 @@ public class AuditContributeActivity extends Activity {
                     if (charSequence.length()>=300){
                         Toast.makeText(AuditContributeActivity.this,"限制输入300个字",Toast.LENGTH_LONG).show();
                     }
-                    if(bmobFile==null){
+                    if(photopath==null){
                         tv_submit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -77,11 +86,14 @@ public class AuditContributeActivity extends Activity {
                                     @Override
                                     public void done(String s, BmobException e) {
                                         if (e==null){
-                                            Toast.makeText(AuditContributeActivity.this,"登陆成功", Toast.LENGTH_LONG).show();
-                                            Intent intent=new Intent(AuditContributeActivity.this, MainActivity.class);
-                                            startActivity(intent);
+                                            Toast.makeText(AuditContributeActivity.this,"成功", Toast.LENGTH_LONG).show();
+                                            dialog=new ProgressDialog(AuditContributeActivity.this);
+                                            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                            dialog.setTitle("请稍等");
+                                            dialog.setIndeterminate(false);
+                                            finish();
                                         }else {
-                                            Toast.makeText(AuditContributeActivity.this,"登陆失败", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(AuditContributeActivity.this,"失败", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -91,7 +103,6 @@ public class AuditContributeActivity extends Activity {
                         tv_submit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
                                 contentInfo.setContent(et_content.getText().toString());
                                 bmobFile = new BmobFile(new File(photopath));
                                 contentInfo.setBmobFile(bmobFile);
@@ -105,8 +116,10 @@ public class AuditContributeActivity extends Activity {
                                                 public void done(String s, BmobException e) {
                                                     if (e == null) {
                                                         Toast.makeText(AuditContributeActivity.this, "登陆成功", Toast.LENGTH_LONG).show();
-                                                        Intent intent = new Intent(AuditContributeActivity.this, MainActivity.class);
-                                                        startActivity(intent);
+                                                        dialog=new ProgressDialog(AuditContributeActivity.this);
+                                                        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                        dialog.setTitle("请稍等");
+                                                        finish();
                                                     } else {
                                                         Toast.makeText(AuditContributeActivity.this, "登陆失败", Toast.LENGTH_LONG).show();
                                                     }
@@ -152,15 +165,17 @@ public class AuditContributeActivity extends Activity {
                 startActivityForResult(intent,REQ_2);
             }
         });
+
         iv_sdcardphoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(AuditContributeActivity.this,PhotoActivity.class);
-                intent.putExtra("ket",photopath);
-                startActivity(intent);
-            }
-        });
-    }
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(AuditContributeActivity.this,PhotoActivity.class);
+                    intent.putExtra("ket",photopath);
+                    startActivity(intent);
+                }
+            });
+        }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -1,6 +1,7 @@
 package com.example.anzhuo.myapplication.Audit;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.anzhuo.myapplication.Adapter.HomeAdapter;
 import com.example.anzhuo.myapplication.Infor.ContentInfo;
 import com.example.anzhuo.myapplication.Infor.FragmentInfo;
+import com.example.anzhuo.myapplication.My.Myenteractivity;
 import com.example.anzhuo.myapplication.R;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -115,10 +117,24 @@ public class AuditFragment extends Fragment {
         iv_publish= (ImageView) view.findViewById(R.id.iv_publish);
         vp_pager= (ViewPager) view.findViewById(R.id.vp_pager);
         Fresco.initialize(getActivity());
-        Bmob.initialize(getActivity(),"91b01d0762aeef4a44f5c599dd65e938");
+        Bmob.initialize(getActivity(),"a914836045e7de6a29035e84e62b59e7");
         send();
         homeAdapter=new HomeAdapter(getFragmentManager(),mlist);
         vp_pager.setAdapter(homeAdapter);
+        iv_publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),AuditContributeActivity.class);
+                startActivity(intent);
+            }
+        });
+        iv_my.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), Myenteractivity.class);
+                startActivity(intent);
+            }
+        });
         
     }
     public void send(){

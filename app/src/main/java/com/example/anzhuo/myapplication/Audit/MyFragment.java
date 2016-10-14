@@ -44,11 +44,11 @@ public class MyFragment extends Fragment {
         iv_praise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                i=i+1;
-                if (i==0){
-                    Toast.makeText(getActivity(),"您点赞了",Toast.LENGTH_SHORT).show();
-                }else {
+                i++;
+                if (i%2==0){
                     Toast.makeText(getActivity(),"您取消了点赞",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(),"您点赞了",Toast.LENGTH_SHORT).show();
                 }
             }
         });

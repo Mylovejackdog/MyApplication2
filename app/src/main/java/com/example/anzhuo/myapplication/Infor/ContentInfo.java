@@ -1,5 +1,7 @@
 package com.example.anzhuo.myapplication.Infor;
 
+import com.example.anzhuo.myapplication.My.UserInfo;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 
@@ -10,6 +12,7 @@ public class ContentInfo extends BmobObject {
     private String content;
     private BmobFile bmobFile;
     private Integer type;
+    private UserInfo author;
 
     public BmobFile getBmobFile() {
         return bmobFile;
@@ -33,5 +36,13 @@ public class ContentInfo extends BmobObject {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public UserInfo getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(UserInfo author) {
+        this.author = author;
     }
 }

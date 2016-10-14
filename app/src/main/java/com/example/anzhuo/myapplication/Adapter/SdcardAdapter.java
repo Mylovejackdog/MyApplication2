@@ -45,9 +45,7 @@ public class SdcardAdapter extends BaseAdapter {
             convertView= LayoutInflater.from(context).inflate(R.layout.audit_photo_layout,null);
             viewHolder=new ViewHolder();
             viewHolder.iv_sdcard= (ImageView) convertView.findViewById(R.id.iv_sdcard);
-    //        viewHolder.iv_sdcard.setAdjustViewBounds(true);
-  //          viewHolder.iv_sdcard.setMaxWidth(150);
-   //         viewHolder.iv_sdcard.setMaxHeight(130);
+            viewHolder.iv_sdcard.setAdjustViewBounds(true);
             convertView.setTag(viewHolder);
         }
         viewHolder= (ViewHolder) convertView.getTag();

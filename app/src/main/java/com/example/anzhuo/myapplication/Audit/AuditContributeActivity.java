@@ -17,11 +17,13 @@ import android.widget.Toast;
 
 import com.example.anzhuo.myapplication.Infor.ContentInfo;
 import com.example.anzhuo.myapplication.Main.MainActivity;
+import com.example.anzhuo.myapplication.My.UserInfo;
 import com.example.anzhuo.myapplication.R;
 
 import java.io.File;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -104,7 +106,9 @@ public class AuditContributeActivity extends Activity {
                             @Override
                             public void onClick(View view) {
                                 contentInfo.setContent(et_content.getText().toString());
+                                UserInfo userInfo= BmobUser.getCurrentUser(UserInfo.class);
                                 bmobFile = new BmobFile(new File(photopath));
+                                contentInfo.setAuthor(userInfo);
                                 contentInfo.setBmobFile(bmobFile);
                                 contentInfo.setType(2);
                                 bmobFile.upload(new UploadFileListener() {
@@ -174,7 +178,15 @@ public class AuditContributeActivity extends Activity {
                     startActivity(intent);
                 }
             });
+        iv_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+
+            }
+        });
         }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

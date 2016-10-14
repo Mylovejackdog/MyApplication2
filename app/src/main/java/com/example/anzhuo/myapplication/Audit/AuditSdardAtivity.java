@@ -102,12 +102,13 @@ public class AuditSdardAtivity extends Activity {
         File[] file = files.listFiles();
         try {
             for (File f : file) {//通过for循环遍历获取到的文件数组
-                /*if(f.isDirectory()){//如果是目录，也就是文件夹
+                if(f.isDirectory()){//如果是目录，也就是文件夹
                     getFiles(f.getAbsolutePath());//递归调用
-                }else{*/
-                if (isImageFile(f.getPath())) {//如果是图片文件
-                    imagePath.add(f.getPath());//将文件的路径添加到List集合中
+                }else {
+                    if (isImageFile(f.getPath())) {//如果是图片文件
+                        imagePath.add(f.getPath());//将文件的路径添加到List集合中
 
+                    }
                 }
             }
 

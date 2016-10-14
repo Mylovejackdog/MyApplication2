@@ -19,7 +19,9 @@ import com.bumptech.glide.Glide;
 import com.example.anzhuo.myapplication.Adapter.HomeAdapter;
 import com.example.anzhuo.myapplication.Infor.ContentInfo;
 import com.example.anzhuo.myapplication.Infor.FragmentInfo;
+import com.example.anzhuo.myapplication.My.Myactivity;
 import com.example.anzhuo.myapplication.My.Myenteractivity;
+import com.example.anzhuo.myapplication.My.UserInfo;
 import com.example.anzhuo.myapplication.R;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -32,6 +34,7 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -120,19 +123,27 @@ public class AuditFragment extends Fragment {
         Bmob.initialize(getActivity(),"a914836045e7de6a29035e84e62b59e7");
         send();
         homeAdapter=new HomeAdapter(getFragmentManager(),mlist);
+
         vp_pager.setAdapter(homeAdapter);
         iv_publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(),AuditContributeActivity.class);
-                startActivity(intent);
+             UserInfo   userInfo= BmobUser.getCurrentUser(UserInfo.class);
+                if (userInfo!=null){
+                    Intent intent=new Intent(getActivity(),AuditContributeActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent=new Intent(getActivity(),Myenteractivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         iv_my.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), Myenteractivity.class);
-                startActivity(intent);
+                    Intent intent=new Intent(getActivity(), Myactivity.class);
+                    startActivity(intent);
             }
         });
         

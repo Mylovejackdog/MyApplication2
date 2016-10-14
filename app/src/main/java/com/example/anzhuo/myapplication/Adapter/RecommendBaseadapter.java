@@ -151,13 +151,16 @@ public class RecommendBaseadapter extends BaseAdapter {
                 holderText.tv_content.setText(recommendBmobInfo.getContent());
                 break;
             case TYPE_2:
+                holderPic.tv_title.setText(recommendBmobInfo.getTitle());
                 Glide.with(context).load(recommendBmobInfo.getContent()).asBitmap().override(600, 800
                 ).fitCenter().diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.load).into(holderPic.iv_content);
                 break;
             case TYPE_3:
+                holderGif.tv_title.setText(recommendBmobInfo.getTitle());
                 Glide.with(context).load(recommendBmobInfo.getContent()).asGif().thumbnail(1).sizeMultiplier(1).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.load).into(holderGif.iv_content);
                 break;
             case TYPE_4:
+                holderVideo.tv_title.setText(recommendBmobInfo.getTitle());
                 holderVideo.iv_content.setUp(recommendBmobInfo.getContent(), JCVideoPlayer.SCREEN_LAYOUT_LIST, "老司机出品");
 
                 break;

@@ -185,7 +185,7 @@ public class GifFragment extends Fragment implements ReflashListView.IReflashLis
         handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    lv_gif.reflashComplete();
+                                    lv_gif.onReflashComplete();
                                 }
                             }
                 , 2000);

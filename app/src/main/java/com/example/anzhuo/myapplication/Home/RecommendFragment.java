@@ -1,5 +1,6 @@
 package com.example.anzhuo.myapplication.Home;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -48,6 +49,7 @@ public class RecommendFragment extends Fragment implements ReflashListView.IRefl
     final static int MSG = 11;
     final static int MSN = 12;
     private int limit = 10;
+    private int count = 0;
     private int page = 0;
     boolean isCache;
     final  int RQ=1;
@@ -83,12 +85,6 @@ public class RecommendFragment extends Fragment implements ReflashListView.IRefl
                     break;
 
                 case MSN:
-                    page++;
-                    if (count()<limit*page){
-
-                        Toast.makeText(getActivity(),"没有更多数据",Toast.LENGTH_SHORT).show();
-                        lv_recommend.onLoadComplete();
-                    }else {
                         query.order("-creat_time");
                         query.setLimit(limit);
                         query.setSkip(limit * page);
@@ -105,7 +101,7 @@ public class RecommendFragment extends Fragment implements ReflashListView.IRefl
                                 }
                             }
                         });
-                    }
+
                     break;
             }
         }
@@ -168,49 +164,49 @@ public class RecommendFragment extends Fragment implements ReflashListView.IRefl
     }
 
     public void startThread() {
-        new Thread() {
-
-            @Override
-            public void run() {
                 //               requestUrl("https://route.showapi.com/341-2?maxResult=50&page=&showapi_appid=24171&showapi_timestamp=20160919160521&time=2016-1-1&showapi_sign=bed59e2c8f354caf02960a97c2eb4a28");
-                handler.sendEmptyMessage(MSG);
+        BmobQuery<RecommendBmobInfo> query = new BmobQuery<RecommendBmobInfo>();
+        query.count(RecommendBmobInfo.class, new CountListener() {
+            @Override
+            public void done(Integer count, BmobException e) {
+                if(e==null){
+                    Toast.makeText(getActivity(), "count:"+count, Toast.LENGTH_SHORT).show();
+                    RecommendFragment.this.count = count;
+                    handler.sendEmptyMessage(MSG);
+                }else{
+                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                }
             }
-        }.start();
+        });
+
+
     }
 
-    public void ReflashThread() {
 
-        new Thread() {
-            public void run() {
-
-                handler.sendEmptyMessage(MSN);
-
-            }
-
-        }.start();
-    }
 
 
     public void onReflash() {
-
-        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                lv_recommend.reflashComplete();
+                lv_recommend.onReflashComplete();
             }
 
         }, 2000);
-
     }
 
 
     public void onLoad() {
-        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ReflashThread();
+                page++;
+                if(count<page*limit){
+                    Toast.makeText(getActivity(),"没有更多数据",Toast.LENGTH_SHORT).show();
+                    lv_recommend.onLoadComplete();
+                }else {
+                    handler.sendEmptyMessage(MSN);
+                }
             }
 
         }, 2000);
@@ -228,15 +224,4 @@ public class RecommendFragment extends Fragment implements ReflashListView.IRefl
         return false;
     }
 
-    public int count (){
-        query.addQueryKeys("objectId");
-        query.findObjects(new FindListener<RecommendBmobInfo>() {
-            @Override
-            public void done(List<RecommendBmobInfo> list, BmobException e) {
-
-            }
-        });
-
-       return  list.size();
-    }
 }

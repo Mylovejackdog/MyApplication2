@@ -227,7 +227,7 @@ public class ReflashListView extends ListView implements AbsListView.OnScrollLis
     }
 
     //   获取完数据
-    public void reflashComplete() {
+    public void onReflashComplete() {
         state = NONE;
         isRemark = false;
         reflashViewByState();
@@ -235,7 +235,7 @@ public class ReflashListView extends ListView implements AbsListView.OnScrollLis
         TextView last = (TextView) header.findViewById(R.id.tv_last);
         Toast.makeText(getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
         last.setText("上次刷新时间：");
-        time.setText(ReflashCompleteTime());
+        time.setText(getReflashCompleteTime());
     }
 
     //加载完数据
@@ -249,7 +249,7 @@ public class ReflashListView extends ListView implements AbsListView.OnScrollLis
         this.iReflashListener = iReflashListener;
     }
 
-    public String ReflashCompleteTime() {
+    private String getReflashCompleteTime() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String newtime = format.format(System.currentTimeMillis());
         return newtime;

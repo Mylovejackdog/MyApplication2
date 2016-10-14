@@ -191,7 +191,7 @@ public class TextFragment extends Fragment implements ReflashListView.IReflashLi
             @Override
             public void run() {
 
-                lv_text.reflashComplete();
+                lv_text.onReflashComplete();
 
             }
         }, 2000);

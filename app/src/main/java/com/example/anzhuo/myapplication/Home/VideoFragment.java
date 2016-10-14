@@ -182,7 +182,7 @@ public class VideoFragment extends Fragment implements ReflashListView.IReflashL
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                lv_video.reflashComplete();
+                lv_video.onReflashComplete();
             }
         }, 2000);
     }

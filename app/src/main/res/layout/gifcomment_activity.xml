@@ -24,6 +24,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="详情"
+            android:textColor="#FCFBFB"
             android:textSize="19sp" />
 
         <TextView
@@ -34,6 +35,7 @@
             android:layout_margin="12dp"
             android:gravity="center"
             android:text="举报"
+            android:textColor="#FCFBFB"
             android:textSize="15sp" />
 
     </LinearLayout>

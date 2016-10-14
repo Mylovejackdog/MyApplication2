@@ -188,7 +188,7 @@ public class PictureFragment extends Fragment implements ReflashListView.IReflas
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                lv_pic.reflashComplete();
+                lv_pic.onReflashComplete();
             }
 
         }, 2000);

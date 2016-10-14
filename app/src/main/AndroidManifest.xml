@@ -16,6 +16,7 @@
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
@@ -53,10 +54,7 @@
         </activity>
         <activity android:name=".My.Myheadactivity"></activity>
         <activity android:name=".My.MyuserActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".My.Myenteractivity">
 
@@ -101,6 +99,18 @@
 
         </activity>
         <activity android:name=".My.MyheadphotoActivity">
+
+        </activity>
+        <activity android:name=".Audit.AuditContributeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Audit.AuditSdardAtivity">
+
+        </activity>
+        <activity android:name=".Audit.PhotoActivity">
 
         </activity>
 

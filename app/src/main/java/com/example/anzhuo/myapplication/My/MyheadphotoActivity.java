@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,32 +26,51 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 /**
  * Created by anzhuo on 2016/10/11.
  */
 public class MyheadphotoActivity extends Activity implements View.OnClickListener {
-    private static final int IMAGE_REQUEST_CODE = 0;
-    private static final int CAMERA_REQUEST_CODE = 1;
-    private static final int RESIZE_REQUEST_CODE = 2;
+    private static final int PICTURE_FROM_CAMERA = 0X32;
+    private static final int PICTURE_FROM_GALLERY = 0X34;
 
     private static final String IMAGE_FILE_NAME = "header.jpg";
 
     private ImageView mImageHeader;
      Bitmap bitmap;
-    String img_url;
     Uri uri;
+    File file;//存储拍摄图片的文件
+    String username;
+    String phone;
+    String pwd;
+    String nickname;
+    com.example.anzhuo.myapplication.My.UserInfo userInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_headphoto_layout);
         setupViews();
+
+        Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
+
+        Intent intent=getIntent();
+        username=intent.getExtras().getString("username");
+        phone=intent.getExtras().getString("phonenumber");
+        pwd=intent.getExtras().getString("password");
+        nickname=intent.getExtras().getString("nickname");
+
     }
     private void setupViews() {
         mImageHeader = (ImageView) findViewById(R.id.image_header);
@@ -62,6 +82,7 @@ public class MyheadphotoActivity extends Activity implements View.OnClickListene
         selectBtn2.setOnClickListener(this);
         selsctBtn3.setOnClickListener(this);
         selectBtn4.setOnClickListener(this);
+
     }
 
     @Override
@@ -74,194 +95,148 @@ public class MyheadphotoActivity extends Activity implements View.OnClickListene
                 break;
             case R.id.btn_selectimage:
               gotosystempic(v);
-     /*           Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                galleryIntent.setType("image*//*");//图片
-                startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);*/
                 break;
             case R.id.iv_xiangji:
               gototakephoto(v);
-             /*   if (isSdcardExisting()) {
-                    Intent cameraIntent = new Intent(
-                            "android.media.action.IMAGE_CAPTURE");//拍照
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
-                    cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-                } else {
-                    Toast.makeText(v.getContext(), "请插入sd卡", Toast.LENGTH_LONG)
-                            .show();
-                }*/
                 break;
             case R.id.bt_save:
-                 //  upload(img_url);
                uploadHead(v);
                 break;
         }
     }
-/*   @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
-            return;
-        } else {
-            switch (requestCode) {
-                case IMAGE_REQUEST_CODE:
-                    Uri originalUri=data.getData();//获取图片uri
-                    resizeImage(originalUri);
-                    //下面方法将获取的uri转为String类型哦！
-                    String []imgs1={MediaStore.Images.Media.DATA};//将图片URI转换成存储路径
-                    Cursor cursor=this.managedQuery(originalUri, imgs1, null, null, null);
-                    int index=cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    img_url=cursor.getString(index);
-                    upload(img_url);
-                    break;
-                case CAMERA_REQUEST_CODE:
-                    if (isSdcardExisting()) {
-                        resizeImage(getImageUri());
-                        String []imgs={MediaStore.Images.Media.DATA};//将图片URI转换成存储路径
-                        Cursor cursor1=this.managedQuery(getImageUri(), imgs, null, null, null);
-                        int index1=cursor1.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor1.moveToFirst();
-                        img_url=cursor1.getString(index1);
-                        upload(img_url);
-                    } else {
-                        Toast.makeText(MyheadphotoActivity.this, "未找到存储卡，无法存储照片！",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    break;
-
-                case RESIZE_REQUEST_CODE:
-                    if (data != null) {
-                        showResizeImage(data);
-                    }
-                    break;
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
-  /*  private boolean isSdcardExisting() {//判断SD卡是否存在
-        final String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public void resizeImage(Uri uri) {//重塑图片大小
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image*//*");
-        intent.putExtra("crop", "true");//可以裁剪
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, RESIZE_REQUEST_CODE);
-    }
-    private void showResizeImage(Intent data) {//显示图片
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            Drawable drawable = new BitmapDrawable(photo);
-            mImageHeader.setImageDrawable(drawable);
-        }
-    }*/
- /*   private Uri getImageUri() {//获取路径
-        return Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                IMAGE_FILE_NAME));
-    }*/
-/*    private void upload(String imgpath){
-        final BmobFile icon=new BmobFile(new File(Environment.getExternalStorageDirectory(),IMAGE_FILE_NAME));
-        icon.upload( new UploadFileListener() {
-            @Override
-            public void done(BmobException e) {
-                 if (e==null){
-                     UserInfo userInfo=new UserInfo();
-                     userInfo.setHead(icon);
-                     userInfo.signUp(new SaveListener<UserInfo>() {
-                         @Override
-                         public void done(UserInfo userInfo, BmobException e) {
-                             if (e==null){
-                                 Toast.makeText(MyheadphotoActivity.this,"上传成功",Toast.LENGTH_SHORT).show();
-                             }else {
-                                 Toast.makeText(MyheadphotoActivity.this,"上传失败",Toast.LENGTH_SHORT).show();
-                             }
-                         }
-                     });
-                 }
-            }
-        });
-    }*/
-
-
-    private void gotosystempic(View view){
-        Intent intent=new Intent(Intent.ACTION_GET_CONTENT,null);
+private void gotosystempic(View view){
+        //设置启动相册的Action
+        Intent intent=new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        //设置类型
         intent.setType("image/*");
-        intent.putExtra("return_data", true);
-        startActivityForResult(intent, 1);
+        //启动相册，这里使用有返回结果的启动
+        startActivityForResult(intent, PICTURE_FROM_GALLERY);
     }
     private void gototakephoto(View view){
-        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 2);
+        //启动相机的Action
+        Intent intent=new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        //文件的保存位置
+        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
+                System.currentTimeMillis() + ".jpg");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //设置图片拍摄后保存的位置
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        //启动相机，这里使用有返回结果的启动
+        startActivityForResult(intent, PICTURE_FROM_CAMERA);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==1&&resultCode==RESULT_OK){
-            uri=data.getData();
-            ContentResolver contentResolver=this.getContentResolver();
-            try {
-                bitmap= BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
-                System.out.println("the bmp toString:"+bitmap);
-                mImageHeader.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+        // super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+            switch (requestCode){
+                case PICTURE_FROM_CAMERA:
+                    //这里对图片进行了压缩，因为有些手机拍摄的照片过大，无法显示到ImageView中，所以我们将图片近行了压缩然后在进行显示
+                    ZipImage.zipImage(Uri.fromFile(file).getPath());
+                    //将图片设置到ImageView中，这里使用setImageURI（）方法进行设置。
+                    mImageHeader.setImageURI(Uri.fromFile(file));
+                    break;
+                case PICTURE_FROM_GALLERY:
+                    //通过返回的data数据，获取图片的路径信息，但是这个路径是Uri的。
+                    uri =data.getData();
+                    ContentResolver contentResolver=this.getContentResolver();
+                    try {
+                        bitmap=BitmapFactory.decodeStream(contentResolver.openInputStream(uri));
+                        //把bitmap写成file文件
+                        file = new File("/sdcard/myFolder");
+                        if (!file.exists())
+                            file.mkdir();
+                        file = new File("/sdcard/temp.jpg".trim());
+                        String fileName = file.getName();
+                        String mName = fileName.substring(0, fileName.lastIndexOf("."));
+                        String sName = fileName.substring(fileName.lastIndexOf("."));
+                        // /sdcard/myFolder/temp_cropped.jpg
+                        String newFilePath = "/sdcard/myFolder" + "/" + mName + "_cropped" + sName;
+                        file = new File(newFilePath);
+                        try {
+                            file.createNewFile();
+                            FileOutputStream fos = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                            fos.flush();
+                            fos.close();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        //  System.out.println("the bmp toString:"+bitmap);
+                        Log.i("LW", "哈哈：" + bitmap);
+                        mImageHeader.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
-        }else if (requestCode==2&&resultCode==RESULT_OK){
-             bitmap= (Bitmap) data.getExtras().get("data");
-            mImageHeader.setImageBitmap(bitmap);
         }
     }
-   public void uploadHead(View view){
-     /*   ByteArrayOutputStream output= new ByteArrayOutputStream();
-        BitmapDrawable bitmapDrawable= (BitmapDrawable) mImageHeader.getDrawable();
-        final Bitmap finalBm;
-        finalBm= scaleTmg(bitmapDrawable.getBitmap(),300);
-        finalBm.compress(Bitmap.CompressFormat.JPEG, 60, output);
-        byte [] result=output.toByteArray();*/
-        final BmobFile file=new BmobFile(new File(Environment.getExternalStorageDirectory(),IMAGE_FILE_NAME));
-        file.upload(new UploadFileListener() {
-           @Override
-           public void done(BmobException e) {
-               if (e==null){
-                   UserInfo userInfo=new UserInfo();
-                   userInfo.setHead(file);
-                   userInfo.signUp(new SaveListener<UserInfo>() {
-                       @Override
-                       public void done(UserInfo userInfo, BmobException e) {
-                           if (e==null){
-                               Toast.makeText(MyheadphotoActivity.this,"上传成功",Toast.LENGTH_SHORT).show();
-                           }else {
-                               Toast.makeText(MyheadphotoActivity.this,"上传失败",Toast.LENGTH_SHORT).show();
-                           }
-                       }
-                   });
-               }
-           }
-       });
 
+    public void uploadHead(View view) {
+
+        final BmobFile bmobFile = new BmobFile(file);
+        bmobFile.upload(new UploadFileListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.i("LW", "123");
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUsername(username);
+                    userInfo.setNickname(nickname);
+                    userInfo.setPhoneNumber(phone);
+                    userInfo.setPassword(pwd);
+                    userInfo.setHead(bmobFile);
+                    userInfo.signUp(new SaveListener<UserInfo>() {
+                        @Override
+                        public void done(UserInfo userInfo, BmobException e) {
+                            if (e==null){
+                                Log.i("LW", "12345");
+                                Toast.makeText(MyheadphotoActivity.this,"注册成功："+"账号："+username,Toast.LENGTH_SHORT).show();
+                                Intent intent=new Intent(MyheadphotoActivity.this,Myenteractivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else {
+                                    Toast.makeText(MyheadphotoActivity.this, "注册失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Intent intenta=new Intent(MyheadphotoActivity.this,MyuserActivity.class);
+                                startActivity(intenta);
+                                finish();
+                            }
+                        }
+                    });
+                }else {
+                    Log.i("LW", "1234");
+                    Toast.makeText(MyheadphotoActivity.this,"上传失败",Toast.LENGTH_SHORT).show();
+                    Intent intentb=new Intent(MyheadphotoActivity.this,MyuserActivity.class);
+                    startActivity(intentb);
+                    finish();
+                }
+            }
+        });
     }
-/*    protected Bitmap scaleTmg(Bitmap bitmap,int newWidth){
-        int width=bitmap.getWidth();
-        int height=bitmap.getHeight();
-        //计算缩放比例
-        float scaleWidth=((float)newWidth)/width;
-        //取得想要的缩放的martrix参数
-        Matrix matrix=new Matrix();
-        matrix.postScale(scaleWidth,scaleWidth);
-        //得到新图片
-        return Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true);
-
-    }*/
+     /*  userInfo=new com.example.anzhuo.myapplication.My.UserInfo();
+        Log.i("LW", bmobFile + "");
+        userInfo.setHead(bmobFile);
+        userInfo=BmobUser.getCurrentUser(com.example.anzhuo.myapplication.My.UserInfo.class);
+     //   String id= (String) BmobUser.getObjectByKey("ObjectId");
+        userInfo.update(userInfo.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.i("LW", "更新成功");
+                    Intent intent = new Intent(MyheadphotoActivity.this, Myactivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });*/
 }

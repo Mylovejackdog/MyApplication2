@@ -2,7 +2,9 @@ package com.example.anzhuo.myapplication.My;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,11 +20,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Random;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -38,24 +42,25 @@ public class MyuserActivity extends Activity implements View.OnClickListener {
     public EditText  et_infopwd;
     public TextView  tv_code;
     public EditText  et_input;
+    public EditText  et_numberphone;
     public Button    bt_enter;
     private int START = 0;
     String phone;
     String user;
     String input;
     UserInfo userInfo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_user_layout);
-      //  Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
+        Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
         userInfo=new UserInfo();
         iv_back= (ImageView) findViewById(R.id.iv_back);
         et_user= (EditText) findViewById(R.id.et_user);
         et_nickname= (EditText) findViewById(R.id.et_nickname);
         et_pwd= (EditText) findViewById(R.id.et_pwd);
         et_infopwd= (EditText) findViewById(R.id.et_infopwd);
+        et_numberphone= (EditText) findViewById(R.id.et_numberphone);
         et_input= (EditText) findViewById(R.id.et_input);
         tv_code= (TextView) findViewById(R.id.tv_code);
         bt_enter= (Button) findViewById(R.id.bt_enter);
@@ -91,16 +96,24 @@ public class MyuserActivity extends Activity implements View.OnClickListener {
                     if (et_input.getText().toString().equals(input)){
                         if (et_user!=null&&et_infopwd.getText().toString().equals(et_pwd.getText().toString())){
                             Log.i("LW", "12345");
-                            userInfo.setPassword(et_pwd.getText().toString());
+                            Intent intent1=new Intent(MyuserActivity.this,MyheadphotoActivity.class);
+                             intent1.putExtra("password",et_pwd.getText().toString());
+                             intent1.putExtra("username",et_user.getText().toString());
+                             intent1.putExtra("phonenumber",et_numberphone.getText().toString());
+                             intent1.putExtra("nickname",et_nickname.getText().toString());
+                             startActivity(intent1);
+                             finish();
+                           /* userInfo.setPassword(et_pwd.getText().toString());
                             userInfo.setUsername(et_user.getText().toString());
+                            userInfo.setPhoneNumber(et_numberphone.getText().toString());
                             userInfo.setNickname(et_nickname.getText().toString());
                             userInfo.signUp(new SaveListener<UserInfo>() {
                                 @Override
                                 public void done(UserInfo userInfo, BmobException e) {
                                     if (e == null) {
                                         Log.i("LW", "1234");
-                                        Intent intent = new Intent(MyuserActivity.this, Myenteractivity.class);
-                                        startActivity(intent);
+                                        *//*Intent intent = new Intent(MyuserActivity.this, Myenteractivity.class);
+                                        startActivity(intent);*//*
                                         Toast.makeText(MyuserActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                                         finish();
                                     } else {
@@ -113,7 +126,7 @@ public class MyuserActivity extends Activity implements View.OnClickListener {
                                         }
                                     }
                                 }
-                            });
+                            });*/
                         }else {
                             Toast.makeText(MyuserActivity.this,"请输入相同的密码！",Toast.LENGTH_SHORT).show();
                         }

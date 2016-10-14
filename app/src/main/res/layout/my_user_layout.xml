@@ -34,13 +34,18 @@
         />
     </LinearLayout>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/border"
+        android:padding="6dp"
+        >
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
     android:orientation="horizontal"
     android:background="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
     android:padding="8dp"
     android:gravity="center"
     >
@@ -62,11 +67,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:padding="8dp"
         android:gravity="center"
         >
@@ -85,14 +87,34 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"/>
     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:gravity="center"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:text="电话"
+                android:gravity="center"
+                android:textSize="20sp"
+                />
+            <EditText
+                android:id="@+id/et_numberphone"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:padding="8dp"
         android:gravity="center"
         >
@@ -115,9 +137,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         android:background="@color/white"
         android:padding="8dp"
@@ -143,11 +162,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:padding="8dp"
         android:background="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         >
         <TextView
             android:layout_width="0dp"
@@ -182,12 +198,14 @@
             android:visibility="invisible"
             />
     </LinearLayout>
+    </LinearLayout>
     <Button
         android:id="@+id/bt_enter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
-        android:text="同意协议并注册"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:text="去选取头像"
         android:textSize="20sp"
         android:padding="8dp"
         android:textColor="@color/white"

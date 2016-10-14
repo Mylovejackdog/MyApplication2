@@ -4,6 +4,7 @@ package com.example.anzhuo.myapplication.My;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.anzhuo.myapplication.Utils.MainApplication;
 import com.example.anzhuo.myapplication.Utils.Util;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -27,10 +29,26 @@ import com.tencent.connect.UserInfo;
 import com.tencent.tauth.IUiListener;
 
 import com.example.anzhuo.myapplication.R;
+import com.tencent.tauth.LbsAgent;
 import com.tencent.tauth.UiError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 
 /**
@@ -40,35 +58,44 @@ public class Myactivity extends AppCompatActivity {
 
     private UserInfo mInfo;//QQ登入
     com.facebook.drawee.view.SimpleDraweeView iv_head;
-    public ImageView iv_back,iv_set;
+    public ImageView iv_back, iv_set;
     public ImageButton imagebtn;
-    public TextView  tv_name;
-    public LinearLayout fans,attention;
+    public TextView tv_name;
+    public LinearLayout fans, attention;
     public RadioGroup group;
-    public RadioButton rb_contribute,rb_collect,rb_comment;
+    public RadioButton rb_contribute, rb_collect, rb_comment;
     public FrameLayout vp_main;
     private boolean isNight = false; //夜间模式变量
-    boolean click=true;//夜间模式变量
+    boolean click = true;//夜间模式变量
+
+
+
 
     Collectactivity collectactivity;
     Commentactivity commentactivity;
     Contributeactivity contributeactivity;
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
-
-
-    Handler mHandler=new Handler(){
+    Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+        }
+    };
+
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
                 case 0:
-                    JSONObject response= (JSONObject) msg.obj;
-                    if (response.has("nickname")){
+                    JSONObject response = (JSONObject) msg.obj;
+                    if (response.has("nickname")) {
                         try {
                             //加载QQ昵称
                             tv_name.setText(response.getString("nickname"));
-                            Log.i("LW","123");
+                            Log.i("LW", "123");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -76,7 +103,7 @@ public class Myactivity extends AppCompatActivity {
                     break;
                 case 1:
                     //加载QQ头像
-                    Bitmap bitmap= (Bitmap) msg.obj;
+                    Bitmap bitmap = (Bitmap) msg.obj;
                     iv_head.setImageBitmap(bitmap);
                     iv_head.setVisibility(View.VISIBLE);
                     Log.i("LW", "1265");
@@ -89,80 +116,102 @@ public class Myactivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //字体大小设置
-        int mode=-1;
-        try{
-            mode=getIntent().getIntExtra("textsize", 1);
-        }catch(NullPointerException e){
+        int mode = -1;
+        try {
+            mode = getIntent().getIntExtra("textsize", 1);
+        } catch (NullPointerException e) {
             e.printStackTrace();
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
-        if(mode==-1||mode==1){
+        if (mode == -1 || mode == 1) {
             this.setTheme(R.style.Theme_Small);
-        }else if(mode==2){
+        } else if (mode == 2) {
             this.setTheme(R.style.Theme_Medium);
-        }else {
+        } else {
             this.setTheme(R.style.Theme_Large);
         }
         //夜间模式
-        if (MainApplication.appConfig.isNighTheme()){
+        if (MainApplication.appConfig.isNighTheme()) {
             Myactivity.this.setTheme(R.style.NightTheme);
-            isNight=true;
-        }else {
+            isNight = true;
+        } else {
             Myactivity.this.setTheme(R.style.DayTheme);
-            isNight=false;
+            isNight = false;
         }
         //圆形图片加载初始化
         Fresco.initialize(this);
         setContentView(R.layout.my_layout);
-        iv_back= (ImageView) findViewById(R.id.iv_back);
-        iv_set= (ImageView) findViewById(R.id.iv_set);
-        iv_head= (com.facebook.drawee.view.SimpleDraweeView) findViewById(R.id.iv_head);
-        tv_name= (TextView) findViewById(R.id.tv_name);
-        imagebtn= (ImageButton) findViewById(R.id.imagebtn);
-        fans= (LinearLayout) findViewById(R.id.fans);
-        attention= (LinearLayout) findViewById(R.id.attention);
-        group= (RadioGroup) findViewById(R.id.group);
-        rb_contribute= (RadioButton) findViewById(R.id.rb_contribute);
-        rb_collect= (RadioButton) findViewById(R.id.rb_collect);
-        rb_comment= (RadioButton) findViewById(R.id.rb_comment);
-        vp_main= (FrameLayout) findViewById(R.id.vp_main);
+        iv_back = (ImageView) findViewById(R.id.iv_back);
+        iv_set = (ImageView) findViewById(R.id.iv_set);
+        iv_head = (com.facebook.drawee.view.SimpleDraweeView) findViewById(R.id.iv_head);
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        imagebtn = (ImageButton) findViewById(R.id.imagebtn);
+        fans = (LinearLayout) findViewById(R.id.fans);
+        attention = (LinearLayout) findViewById(R.id.attention);
+        group = (RadioGroup) findViewById(R.id.group);
+        rb_contribute = (RadioButton) findViewById(R.id.rb_contribute);
+        rb_collect = (RadioButton) findViewById(R.id.rb_collect);
+        rb_comment = (RadioButton) findViewById(R.id.rb_comment);
+        vp_main = (FrameLayout) findViewById(R.id.vp_main);
+
+
+         final com.example.anzhuo.myapplication.My.UserInfo userInfo = BmobUser.getCurrentUser(com.example.anzhuo.myapplication.My.UserInfo.class);
+        if (userInfo != null) {
+       //     Log.i("LW",userInfo.getHead().getFileUrl()+"");
+            if(userInfo.getHead()!=null) {
+                Glide.with(Myactivity.this).load(userInfo.getHead().getFileUrl()).asBitmap().into(iv_head);
+            }
+            else {
+                iv_head.setImageResource(R.drawable.avator_default);
+            }
+            String name = (String) BmobUser.getObjectByKey("nickname");
+            tv_name.setText(name);
+        } else {
+            tv_name.setText("游客");
+            iv_head.setImageResource(R.drawable.avator_default);
+
+        }
+
+
         showFragment(0);
         //QQ第三方登入
-            IUiListener listener = new IUiListener() {
-                @Override
-                public void onError(UiError uiError) {
-                }
-                @Override
-                public void onComplete(final Object response) {
-                    Message msg = new Message();
-                    msg.obj = response;
-                    msg.what = 0;
-                    mHandler.sendMessage(msg);
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            JSONObject josn = (JSONObject) response;
-                            if (josn.has("figureurl")) {
-                                Bitmap bitmap = null;
-                                try {
-                                    bitmap = Util.getbitmap(josn.getString("figureurl_qq_2"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                Message msg = new Message();
-                                msg.obj = bitmap;
-                                msg.what = 1;
-                                mHandler.sendMessage(msg);
+        IUiListener listener = new IUiListener() {
+            @Override
+            public void onError(UiError uiError) {
+            }
+
+            @Override
+            public void onComplete(final Object response) {
+                Message msg = new Message();
+                msg.obj = response;
+                msg.what = 0;
+                mHandler.sendMessage(msg);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        JSONObject josn = (JSONObject) response;
+                        if (josn.has("figureurl")) {
+                            Bitmap bitmap = null;
+                            try {
+                                bitmap = Util.getbitmap(josn.getString("figureurl_qq_2"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                            Message msg = new Message();
+                            msg.obj = bitmap;
+                            msg.what = 1;
+                            mHandler.sendMessage(msg);
                         }
-                    }.start();
-                }
-                @Override
-                public void onCancel() {
-                }
-            };
-        if (MainApplication.mQQAuth!=null){
-            mInfo=new UserInfo(this,MainApplication.mQQAuth.getQQToken());
+                    }
+                }.start();
+            }
+
+            @Override
+            public void onCancel() {
+            }
+        };
+        if (MainApplication.mQQAuth != null) {
+            mInfo = new UserInfo(this, MainApplication.mQQAuth.getQQToken());
             mInfo.getUserInfo(listener);
         }
 
@@ -177,7 +226,7 @@ public class Myactivity extends AppCompatActivity {
         iv_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(Myactivity.this, Setactivity.class);
+                Intent intent = new Intent(Myactivity.this, Setactivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -185,9 +234,16 @@ public class Myactivity extends AppCompatActivity {
         iv_head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intenta=new Intent(Myactivity.this,Myenteractivity.class);
-                startActivity(intenta);
-                finish();
+                if (userInfo != null) {
+                    Intent intent = new Intent(Myactivity.this, Myheadactivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intenta = new Intent(Myactivity.this, Myenteractivity.class);
+                    startActivity(intenta);
+                    finish();
+                }
+
             }
         });
         tv_name.setOnClickListener(new View.OnClickListener() {
@@ -214,12 +270,13 @@ public class Myactivity extends AppCompatActivity {
             }
         });
     }
+
     //fragment的连用
-    private void showFragment(int i){
-            fragmentManager=getFragmentManager();
-            transaction=fragmentManager.beginTransaction();
-            hideAllFragment(transaction);
-        switch (i){
+    private void showFragment(int i) {
+        fragmentManager = getFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        hideAllFragment(transaction);
+        switch (i) {
             case 0:
                 if (contributeactivity == null) {
                     contributeactivity = new Contributeactivity();
@@ -247,30 +304,65 @@ public class Myactivity extends AppCompatActivity {
         }
         transaction.commit();
     }
-    private void hideAllFragment(FragmentTransaction transaction){
-        if (contributeactivity!=null){
+
+    private void hideAllFragment(FragmentTransaction transaction) {
+        if (contributeactivity != null) {
             transaction.hide(contributeactivity);
         }
-        if (collectactivity!=null){
+        if (collectactivity != null) {
             transaction.hide(collectactivity);
         }
-        if (commentactivity!=null){
+        if (commentactivity != null) {
             transaction.hide(commentactivity);
         }
     }
+
     //夜间模式
-      public void changeTheme(View view){
-          Toast.makeText(this,"123",Toast.LENGTH_SHORT).show();
-          if (isNight){
-              MainApplication.appConfig.setNightTheme(false);
-          }else {
-              MainApplication.appConfig.setNightTheme(true);
-          }
-          Intent intent=getIntent();
-          overridePendingTransition(0,R.anim.out_anim);
-          finish();
-          overridePendingTransition(R.anim.in_anim, 0);
-          startActivity(intent);
-      }
+    public void changeTheme(View view) {
+        Toast.makeText(this, "123", Toast.LENGTH_SHORT).show();
+        if (isNight) {
+            MainApplication.appConfig.setNightTheme(false);
+        } else {
+            MainApplication.appConfig.setNightTheme(true);
+        }
+        Intent intent = getIntent();
+        overridePendingTransition(0, R.anim.out_anim);
+        finish();
+        overridePendingTransition(R.anim.in_anim, 0);
+        startActivity(intent);
+    }
+    public Bitmap getHttpBitmap(String url){
+        Bitmap bitmap=null;
+        URL myUrl;
+            /*myUrl=new URL(url);
+            HttpURLConnection conm=myUrl.openConnection();
+            HttpURLConnection conn=(HttpURLConnection)myUrl.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.connect();
+            InputStream is=conn.getInputStream();
+            bitmap= BitmapFactory.decodeStream(is);
+            //把bitmap转成圆形
+            bitmap=toRoundBitmap(bitmap);
+            is.close();*/
+        try {
+            myUrl=new URL(url);
+            try {
+                HttpURLConnection conm= (HttpURLConnection) myUrl.openConnection();
+                conm.setConnectTimeout(5000);
+                conm.connect();
+                InputStream inputStream=conm.getInputStream();
+                bitmap=BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        //返回圆形bitmap
+        return bitmap;
+    }
+
 
 }

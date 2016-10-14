@@ -36,6 +36,8 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -62,7 +64,7 @@ public class Myenteractivity extends Activity {
     public TextView  tv_forget;
     public TextView  tv_register;
     public LinearLayout ll_qqenter;
-    public TextView   tv_manage;
+
     String user;
     String pwd;
     com.example.anzhuo.myapplication.My.UserInfo userInfo;
@@ -73,7 +75,6 @@ public class Myenteractivity extends Activity {
         Log.d(TAG, "-->onCreate");
         // 固定竖屏
         setContentView(R.layout.my_enter_layout);
-
         initViews();
       //  Bmob.initialize(this, "b5d2051a335bcca76cac2f60ddc09441");
         iv_back= (ImageView) findViewById(R.id.iv_back);
@@ -81,9 +82,8 @@ public class Myenteractivity extends Activity {
         et_pwd= (EditText) findViewById(R.id.et_pwd);
         bt_enter= (Button) findViewById(R.id.bt_enter);
         tv_forget= (TextView) findViewById(R.id.tv_forget);
-        tv_manage= (TextView) findViewById(R.id.tv_manage);
         tv_register= (TextView) findViewById(R.id.tv_register);
-       ll_qqenter= (LinearLayout) findViewById(R.id.ll_qqenter);
+        ll_qqenter= (LinearLayout) findViewById(R.id.ll_qqenter);
 
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,22 +97,41 @@ public class Myenteractivity extends Activity {
         bt_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("LW","12");
                 userInfo=new com.example.anzhuo.myapplication.My.UserInfo();
                 userInfo.setUsername(et_user.getText().toString());
                 userInfo.setPassword(et_pwd.getText().toString());
                 userInfo.login(new SaveListener<com.example.anzhuo.myapplication.My.UserInfo>() {
                     @Override
                     public void done(com.example.anzhuo.myapplication.My.UserInfo userInfo, BmobException e) {
+                        if (e == null) {
+                            Toast.makeText(Myenteractivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Myenteractivity.this, Myactivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(Myenteractivity.this, "登入失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                /*BmobUser bmobUser=new BmobUser();
+                bmobUser.setUsername(et_user.getText().toString());
+                bmobUser.setPassword(et_pwd.getText().toString());
+                bmobUser.login(new SaveListener<BmobUser>() {
+                    @Override
+                    public void done(BmobUser bmobUser, BmobException e) {
                         if (e==null){
+                            Log.i("LW","1234");
                             Toast.makeText(Myenteractivity.this,"登入成功",Toast.LENGTH_SHORT).show();
                             Intent intent=new Intent(Myenteractivity.this,Myactivity.class);
                             startActivity(intent);
                             finish();
                         }else {
-                            Toast.makeText(Myenteractivity.this,"登入成功",Toast.LENGTH_SHORT).show();
+                            Log.i("LW","123");
+                            Toast.makeText(Myenteractivity.this,"登入失败",Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
             }
         });
         tv_forget.setOnClickListener(new View.OnClickListener() {
@@ -127,13 +146,6 @@ public class Myenteractivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(Myenteractivity.this, MyuserActivity.class);
                 startActivity(intent);
-            }
-        });
-        tv_manage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent4=new Intent(Myenteractivity.this,Myheadactivity.class);
-                startActivity(intent4);
             }
         });
 

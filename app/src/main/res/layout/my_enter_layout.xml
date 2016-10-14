@@ -72,26 +72,6 @@
             android:password="true" />
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        >
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tv_forget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="忘记密码"
-            android:textColor="@color/blue"
-            android:textSize="20sp" />
-    </LinearLayout>
-
 
     <Button
         android:id="@+id/bt_enter"
@@ -99,7 +79,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginRight="70dp"
-        android:layout_marginTop="30dp"
         android:background="#ff4646"
         android:gravity="center"
         android:text="登录"
@@ -114,10 +93,10 @@
         android:orientation="horizontal"
         android:padding="8dp">
         <TextView
-            android:id="@+id/tv_manage"
+            android:id="@+id/tv_forget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="账号管理"
+            android:text="忘记密码"
             android:textColor="@color/blue"
             android:textSize="20sp" />
 
@@ -131,13 +110,11 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/ll_qqenter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:padding="8dp">
 
